@@ -4,6 +4,7 @@ import honajun.football_community.global.response.CommonResponse;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,11 @@ public class HealthCheckController {
         } catch (Exception e) {
             return "Database Connection: Failed - " + e.getMessage();
         }
+    }
+
+    @GetMapping("/test-error")
+    public ResponseEntity<String> testInternalServerError() {
+        throw new RuntimeException("내부 서버 오류 테스트");
     }
 }
 

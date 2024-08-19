@@ -12,7 +12,6 @@ import java.util.HashMap;
 public class Reason {
 
     private HttpStatus httpStatus;
-    @JsonProperty("isSuccess")
     private final boolean isSuccess;
     private final String code;
     private final String message;
