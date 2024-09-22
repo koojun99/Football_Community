@@ -1,6 +1,5 @@
-package honajun.football_community.member;
+package honajun.football_community.member.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import honajun.football_community.global.common.BaseDateTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -27,7 +26,7 @@ public class Member extends BaseDateTimeEntity {
     @Column(nullable = false)
     private String password;
 
-    @Column
+    @Column(nullable = false, unique = true)
     private String phoneNumber;
 
     @Column(nullable = false)
