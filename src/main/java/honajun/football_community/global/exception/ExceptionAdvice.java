@@ -27,7 +27,7 @@ import java.util.Optional;
 @RestControllerAdvice(annotations = {RestController.class})
 public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = { GeneralException.class})
+    @ExceptionHandler(value = {GeneralException.class})
     protected ResponseEntity<Object> handleCustomException(GeneralException e, HttpServletRequest request) {
         log.error("handleCustomException throw CustomException : {}", e.getCode());
         return handleExceptionInternal(e, e.getErrorReasonHttpStatus(), HttpHeaders.EMPTY, request);
@@ -131,4 +131,6 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
                 CommonResponse.onFailure(errorCode.getCode(), errorCode.getMessage(), null);
         return super.handleExceptionInternal(e, body, headers, errorCode.getHttpStatus(), request);
     }
+
+
 }

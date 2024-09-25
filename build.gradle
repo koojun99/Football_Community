@@ -26,14 +26,24 @@ repositories {
 dependencies {
     // JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
     // Validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // mail
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    // security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
     // jwt
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
     // redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
     // web
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
@@ -42,9 +52,10 @@ dependencies {
     // lombok
     compileOnly 'org.projectlombok:lombok'
 
+    // dev
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-    runtimeOnly 'com.h2database:h2'
+    // DB
     runtimeOnly 'com.mysql:mysql-connector-j'
 
     // QueryDSL
