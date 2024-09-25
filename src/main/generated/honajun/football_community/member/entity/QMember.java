@@ -21,6 +21,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final honajun.football_community.global.common.QBaseDateTimeEntity _super = new honajun.football_community.global.common.QBaseDateTimeEntity(this);
 
+    public final StringPath bio = createString("bio");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
@@ -28,11 +30,15 @@ public class QMember extends EntityPathBase<Member> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final StringPath name = createString("name");
+
     public final StringPath password = createString("password");
 
     public final StringPath phoneNumber = createString("phoneNumber");
 
-    public final StringPath status = createString("status");
+    public final EnumPath<honajun.football_community.global.enums.MemberRole> role = createEnum("role", honajun.football_community.global.enums.MemberRole.class);
+
+    public final EnumPath<honajun.football_community.global.enums.MemberStatus> status = createEnum("status", honajun.football_community.global.enums.MemberStatus.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;

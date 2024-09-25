@@ -1,14 +1,18 @@
 package honajun.football_community.member.mapper;
 
+import honajun.football_community.global.enums.MemberRole;
 import honajun.football_community.global.enums.MemberStatus;
 import honajun.football_community.member.dto.MemberRequestDTO;
 import honajun.football_community.member.dto.MemberResponseDTO;
 import honajun.football_community.member.entity.Member;
+import honajun.football_community.member.service.MemberService;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberMapper {
+
+    private static MemberService staticMemberService;
 
     public static Member toMember(MemberRequestDTO.register request) {
         return Member.builder()
@@ -19,6 +23,7 @@ public class MemberMapper {
                 .bio(request.getBio())
                 .phoneNumber(request.getPhoneNumber())
                 .status(MemberStatus.ACTIVE)
+                .role(MemberRole.ROLE_USER)
                 .build();
     }
 
@@ -45,5 +50,9 @@ public class MemberMapper {
                 .bio(member.getBio())
                 .phoneNumber(member.getPhoneNumber())
                 .build();
+    }
+
+    public static Member toMemberSecurity(String id) {
+        return staticMemberService.findById(Long.parseLong(id));
     }
 }

@@ -1,14 +1,23 @@
 package honajun.football_community.auth.service;
 
 import honajun.football_community.auth.dto.AuthRequestDTO;
+import honajun.football_community.auth.dto.AuthResponseDTO;
 import honajun.football_community.auth.exception.AuthException;
 import honajun.football_community.auth.exception.AuthExceptionCode;
+import honajun.football_community.auth.mapper.AuthMapper;
+import honajun.football_community.global.security.jwt.JwtTokenProvider;
+import honajun.football_community.member.entity.Member;
 import honajun.football_community.member.service.MemberCommandAdapter;
 import honajun.football_community.member.service.MemberQueryAdapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -21,6 +30,8 @@ public class AuthService {
     private final RedisTemplate<String, String> redisTemplate;
     private static final long EMAIL_CODE_TTL = 5;
     private final EmailService emailService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final RedisService redisService;
 
     public void emailDuplicateCheck(String email) {
         if (memberQueryAdapter.existsByEmail(email)) {
@@ -33,7 +44,7 @@ public class AuthService {
         String verificationCode = generateVerificationCode();
 
         // Redis에 저장 (email:인증코드 형태로 저장)
-        redisTemplate.opsForValue().set("email:verification:" + request.getEmail(), verificationCode, EMAIL_CODE_TTL, TimeUnit.MINUTES);
+        redisService.saveEmailCode(request.getEmail(), verificationCode, EMAIL_CODE_TTL);
 
         // 이메일 전송
         emailService.sendVerificationEmail(request.getEmail(), verificationCode);
@@ -59,4 +70,24 @@ public class AuthService {
         Random random = new Random();
         return String.format("%06d", random.nextInt(1000000));  // 000000~999999 사이의 숫자
     }
+
+    public AuthResponseDTO.login login(AuthRequestDTO.login request) {
+        Member member = memberQueryAdapter.findByEmail(request.getEmail());
+
+        // Role을 SimpleGrantedAuthority로 변환하여 authorities로 만듬
+        Collection<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority(String.valueOf(member.getRole())));
+        if (!member.getPassword().equals(request.getPassword())) {
+            throw new AuthException(AuthExceptionCode._INVALID_PASSWORD);
+        }
+        String accessToken = jwtTokenProvider.createAccessToken(member, authorities);
+        String refreshToken = jwtTokenProvider.createRefreshToken();
+
+        // Redis에 AccessToken 저장
+        redisService.saveToken(member.getId().toString(), accessToken, jwtTokenProvider.getExpirationTime(accessToken));
+        // Redis에 RefreshToken 저장 (사용자 식별자와 함께 저장)
+        redisService.saveToken(member.getId().toString(), refreshToken, jwtTokenProvider.getExpirationTime(refreshToken));
+
+        return AuthMapper.toLogin(member, accessToken, refreshToken);
+    }
+
 }

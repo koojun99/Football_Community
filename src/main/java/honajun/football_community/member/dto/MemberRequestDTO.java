@@ -29,16 +29,6 @@ public class MemberRequestDTO {
     }
 
     @Getter
-    public static class login {
-
-        @NotBlank(message = "이메일을 입력해주세요.")
-        private String email;
-
-        @NotBlank(message = "비밀번호를 입력해주세요.")
-        private String password;
-    }
-
-    @Getter
     public static class updateProfile {
 
         private String name;

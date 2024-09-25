@@ -1,6 +1,7 @@
 package honajun.football_community.member.entity;
 
 import honajun.football_community.global.common.BaseDateTimeEntity;
+import honajun.football_community.global.enums.MemberRole;
 import honajun.football_community.global.enums.MemberStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,6 +9,7 @@ import lombok.*;
 import java.util.Objects;
 
 @Entity
+@Table(name = "members")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -37,6 +39,11 @@ public class Member extends BaseDateTimeEntity {
     private String bio;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private MemberRole role;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     @Setter
     private MemberStatus status;
 

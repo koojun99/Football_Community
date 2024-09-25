@@ -24,4 +24,14 @@ public class AuthRequestDTO {
         @NotBlank(message = "인증코드를 입력해주세요.")
         private String inputCode;
     }
+
+    @Getter
+    public static class login {
+
+        @NotBlank(message = "이메일을 입력해주세요.")
+        private String email;
+
+        @NotBlank(message = "비밀번호를 입력해주세요.")
+        private String password;
+    }
 }

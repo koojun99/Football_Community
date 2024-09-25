@@ -21,6 +21,12 @@ public class MemberService {
         return MemberMapper.toMemberId(savedMember);
     }
 
+    // 회원 조회
+    @Transactional(readOnly = true)
+    public Member findById(Long memberId) {
+        return memberQueryAdapter.findById(memberId);
+    }
+
     @Transactional(readOnly = true)
     public MemberResponseDTO.getMyProfile getMyProfile(Member member) {
         return MemberMapper.toMyProfile(member);

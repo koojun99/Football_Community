@@ -1,6 +1,7 @@
 package honajun.football_community.auth.controller;
 
 import honajun.football_community.auth.dto.AuthRequestDTO;
+import honajun.football_community.auth.dto.AuthResponseDTO;
 import honajun.football_community.auth.service.AuthService;
 import honajun.football_community.global.response.CommonResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,5 +40,13 @@ public class AuthController {
     ) {
         authService.verifyCode(request);
         return CommonResponse.onSuccess(null);
+    }
+
+    @Operation(summary = "로그인", description = "로그인을 진행합니다")
+    @PostMapping("/login")
+    public CommonResponse<AuthResponseDTO.login> login(
+            @RequestBody AuthRequestDTO.login request
+    ) {
+        return CommonResponse.onSuccess(authService.login(request));
     }
 }
