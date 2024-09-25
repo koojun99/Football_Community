@@ -13,9 +13,9 @@ import static org.springframework.http.HttpStatus.*;
 public enum MemberExceptionCode implements BaseCode {
 
     // 400
-    MEMBER_PASSWORD_NOT_MATCH(BAD_REQUEST, "MEMBER400_1","비밀번호가 일치하지 않습니다."),
+    _MEMBER_PASSWORD_NOT_MATCH(BAD_REQUEST, "MEMBER400_1","비밀번호가 일치하지 않습니다."),
     // 403
-    MEMBER_NOT_AUTHORIZED(FORBIDDEN, "MEMBER403_1","해당 회원은 권한이 없습니다."),
+    _MEMBER_NOT_AUTHORIZED(FORBIDDEN, "MEMBER403_1","해당 회원은 권한이 없습니다."),
     // 404
     _MEMBER_NOT_FOUND(NOT_FOUND, "MEMBER401_1","해당 회원을 찾을 수 없습니다."),
     // 409

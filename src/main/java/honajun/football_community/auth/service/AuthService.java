@@ -16,7 +16,6 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final MemberCommandAdapter memberCommandAdapter;
     private final MemberQueryAdapter memberQueryAdapter;
 
     private final RedisTemplate<String, String> redisTemplate;

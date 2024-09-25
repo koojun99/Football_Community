@@ -21,4 +21,9 @@ public class MemberQueryAdapter {
         return memberRepository.findByEmail(email)
                 .orElseThrow(() -> new MemberException(MemberExceptionCode._MEMBER_NOT_FOUND));
     }
+
+    public Member findById(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(MemberExceptionCode._MEMBER_NOT_FOUND));
+    }
 }
