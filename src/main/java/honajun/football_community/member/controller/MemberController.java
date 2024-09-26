@@ -17,13 +17,6 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @Operation(summary = "회원가입", description = "회원가입을 진행합니다.")
-    @PostMapping("/register")
-    public CommonResponse<MemberResponseDTO.getMemberId> register(
-            @RequestBody MemberRequestDTO.register request
-    ) {
-        return CommonResponse.onSuccess(memberService.register(request));
-    }
 
     @Operation(summary = "내 프로필 조회", description = "내 프로필을 조회합니다.")
     @GetMapping("/my-profile")
@@ -39,5 +32,42 @@ public class MemberController {
             @PathVariable Long memberId
     ) {
         return CommonResponse.onSuccess(memberService.getMemberProfile(memberId));
+    }
+
+    @Operation(summary = "회원 정보 수정", description = "회원 정보를 수정합니다.")
+    @PutMapping
+    public CommonResponse<MemberResponseDTO.getMemberId> updateMyProfile(
+            @AuthMember Member member,
+            @RequestBody MemberRequestDTO.updateProfile request
+    ) {
+        return CommonResponse.onSuccess(memberService.updateProfile(member, request));
+    }
+
+    @Operation(summary = "회원 탈퇴", description = "회원 탈퇴를 진행합니다.")
+    @DeleteMapping
+    public CommonResponse<MemberResponseDTO.getMemberId> withdraw(
+            @AuthMember Member member
+    ) {
+        return CommonResponse.onSuccess(memberService.withdraw(member));
+    }
+
+    @Operation(summary = "회원 블라인드", description = "회원을 블라인드 처리합니다.")
+    @PostMapping("/{memberId}/blind")
+    public CommonResponse blindMember(
+            @AuthMember Member member,
+            @PathVariable Long memberId
+    ) {
+        memberService.blindMember(member, memberId);
+        return CommonResponse.onNoContent();
+    }
+
+    @Operation(summary = "회원 블라인드 해제", description = "회원을 블라인드 해제합니다.")
+    @PatchMapping("/{memberId}/blind")
+    public CommonResponse cancelBlind(
+            @AuthMember Member member,
+            @PathVariable Long memberId
+    ) {
+        memberService.cancelBlind(member, memberId);
+        return CommonResponse.onNoContent();
     }
 }

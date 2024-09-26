@@ -67,6 +67,10 @@ public class Member extends BaseDateTimeEntity {
         this.status = MemberStatus.WITHDRAWAL;
     }
 
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
+    }
+
 //    @JsonIgnore
 //    @OneToOne(cascade = CascadeType.ALL, mappedBy = "member")
 //    private Newsfeed newsfeed;

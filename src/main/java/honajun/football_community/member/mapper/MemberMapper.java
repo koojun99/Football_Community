@@ -6,19 +6,32 @@ import honajun.football_community.member.dto.MemberRequestDTO;
 import honajun.football_community.member.dto.MemberResponseDTO;
 import honajun.football_community.member.entity.Member;
 import honajun.football_community.member.service.MemberService;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Component
+@RequiredArgsConstructor
 public class MemberMapper {
 
+    private final MemberService memberService;
     private static MemberService staticMemberService;
+
+    private final PasswordEncoder passwordEncoder;
+    private static PasswordEncoder staticPasswordEncoder;
+
+    @PostConstruct
+    public void init(){
+        this.staticMemberService = this.memberService;
+        this.staticPasswordEncoder = this.passwordEncoder;
+    }
 
     public static Member toMember(MemberRequestDTO.register request) {
         return Member.builder()
                 .name(request.getName())
                 .email(request.getEmail())
-                .password(request.getPassword())
+                .password(staticPasswordEncoder.encode(request.getPassword()))
                 .username(request.getUsername())
                 .bio(request.getBio())
                 .phoneNumber(request.getPhoneNumber())
