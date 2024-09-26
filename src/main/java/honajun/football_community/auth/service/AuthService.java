@@ -13,18 +13,20 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
+    private final PasswordEncoder passwordEncoder;
+
+    private final MemberCommandAdapter memberCommandAdapter;
     private final MemberQueryAdapter memberQueryAdapter;
 
     private final RedisTemplate<String, String> redisTemplate;
@@ -76,7 +78,7 @@ public class AuthService {
 
         // Role을 SimpleGrantedAuthority로 변환하여 authorities로 만듬
         Collection<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority(String.valueOf(member.getRole())));
-        if (!member.getPassword().equals(request.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), member.getPassword())) {
             throw new AuthException(AuthExceptionCode._INVALID_PASSWORD);
         }
         String accessToken = jwtTokenProvider.createAccessToken(member, authorities);
@@ -88,6 +90,13 @@ public class AuthService {
         redisService.saveToken(member.getId().toString(), refreshToken, jwtTokenProvider.getExpirationTime(refreshToken));
 
         return AuthMapper.toLogin(member, accessToken, refreshToken);
+    }
+
+    public void changePassword(Member member, AuthRequestDTO.changePassword request) {
+        if (!passwordEncoder.matches(request.getCurrentPassword(), member.getPassword())) {
+            throw new AuthException(AuthExceptionCode._INVALID_PASSWORD);
+        }
+        memberCommandAdapter.changePassword(member, passwordEncoder.encode(request.getNewPassword()));
     }
 
 }

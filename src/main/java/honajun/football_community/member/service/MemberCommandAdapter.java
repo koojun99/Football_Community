@@ -1,5 +1,7 @@
 package honajun.football_community.member.service;
 
+import honajun.football_community.blind.entity.Blind;
+import honajun.football_community.blind.repository.BlindRepository;
 import honajun.football_community.global.annotation.Adapter;
 import honajun.football_community.member.dto.MemberRequestDTO;
 import honajun.football_community.member.entity.Member;
@@ -11,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberCommandAdapter {
 
     private final MemberRepository memberRepository;
+    private final BlindRepository blindRepository;
 
     public Member register(Member member) {
         return memberRepository.save(member);
@@ -28,5 +31,18 @@ public class MemberCommandAdapter {
 
     public void deleteMember(Member member) {
         memberRepository.delete(member);
+    }
+
+    public void changePassword(Member member, String newPassword) {
+        member.changePassword(newPassword);
+        memberRepository.save(member);
+    }
+
+    public void blindMember(Blind blind) {
+        blindRepository.save(blind);
+    }
+
+    public void cancelBlind(Blind blind) {
+        blindRepository.delete(blind);
     }
 }

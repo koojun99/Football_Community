@@ -17,7 +17,8 @@ public enum MemberExceptionCode implements BaseCode {
     // 403
     _MEMBER_NOT_AUTHORIZED(FORBIDDEN, "MEMBER403_1","해당 회원은 권한이 없습니다."),
     // 404
-    _MEMBER_NOT_FOUND(NOT_FOUND, "MEMBER401_1","해당 회원을 찾을 수 없습니다."),
+    _MEMBER_NOT_FOUND(NOT_FOUND, "MEMBER404_1","해당 회원을 찾을 수 없습니다."),
+    _BLIND_NOT_FOUND(NOT_FOUND, "MEMBER404_2","해당 블라인드를 찾을 수 없습니다."),
     // 409
     _MEMBER_DUPLICATE(CONFLICT,"MEMBER409_1","이미 존재하는 회원입니다."),
     ;

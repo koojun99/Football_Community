@@ -52,6 +52,10 @@ public class CommonResponse<T> {
         return new CommonResponse<>(true, code.getReasonHttpStatus().getCode(), code.getReasonHttpStatus().getMessage(), data);
     }
 
+    public static <T> CommonResponse<T> onNoContent() {
+        return new CommonResponse<>(true, "204", SuccessStatus._NOCONTENT.getMessage() , null);
+    }
+
     public static <T> CommonResponse<T> onFailure(String code, String message, T data) {
         return new CommonResponse<>(false, code, message, data);
     }
