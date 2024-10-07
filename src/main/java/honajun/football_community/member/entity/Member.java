@@ -1,8 +1,8 @@
 package honajun.football_community.member.entity;
 
 import honajun.football_community.global.common.BaseDateTimeEntity;
-import honajun.football_community.global.enums.MemberRole;
-import honajun.football_community.global.enums.MemberStatus;
+import honajun.football_community.global.enums.member.MemberRole;
+import honajun.football_community.global.enums.member.MemberStatus;
 import jakarta.persistence.*;
 import lombok.*;
 

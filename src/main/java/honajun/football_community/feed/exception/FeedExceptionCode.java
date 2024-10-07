@@ -24,6 +24,9 @@ public enum FeedExceptionCode implements BaseCode {
     // Comment + 404
     _COMMENT_NOT_FOUND(NOT_FOUND, "FEED404_3", "댓글을 찾을 수 없습니다."),
 
+    // Report + 409
+    _REPORT_ALREADY_EXISTS(CONFLICT, "FEED409_1", "이미 신고한 게시물 또는 댓글 입니다."),
+
     ;
 
 
