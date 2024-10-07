@@ -1,3 +1,8 @@
+logging:
+  file:
+    encoding: UTF-8
+
+
 spring:
   data:
     redis:
@@ -32,7 +37,13 @@ spring:
     password: ${MAIL_PASSWORD}
 
 jwt:
-    access-token-expiration: 1800000 # 30 minutes
-    refresh-token-expiration: 604800000 # 7 days
+    access-token-expiration: 7200000 # 2 hours
+    refresh-token-expiration: 1209600000 # 14 days
     secret:
       key: ${JWT_SECRET}
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
