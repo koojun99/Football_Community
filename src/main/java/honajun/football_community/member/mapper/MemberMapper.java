@@ -1,7 +1,7 @@
 package honajun.football_community.member.mapper;
 
-import honajun.football_community.global.enums.MemberRole;
-import honajun.football_community.global.enums.MemberStatus;
+import honajun.football_community.global.enums.member.MemberRole;
+import honajun.football_community.global.enums.member.MemberStatus;
 import honajun.football_community.member.dto.MemberRequestDTO;
 import honajun.football_community.member.dto.MemberResponseDTO;
 import honajun.football_community.member.entity.Member;

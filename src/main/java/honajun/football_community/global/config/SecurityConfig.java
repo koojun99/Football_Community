@@ -1,10 +1,12 @@
 package honajun.football_community.global.config;
 
 import honajun.football_community.global.security.jwt.JwtFilter;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -57,10 +59,22 @@ public class SecurityConfig {
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // 정적 리소스에 대한 접근 허용
                         .requestMatchers("/auth/**").permitAll() // /auth/** 경로에 대한 접근 허용
                         .requestMatchers("/members/**").permitAll() // /member/** 경로에 대한 접근 허용
+                        .requestMatchers(HttpMethod.GET, "/feed/posts/{postId}").permitAll() // /feed/posts/** 경로에 대한 접근 허용
                         .anyRequest().authenticated() // 그 외 모든 요청에 대해 인증을 요구합니다.
                 )
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 관리를 Stateless로 설정
-                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)); // 동일 출처에서의 iframe 사용을 허용
+                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))// 동일 출처에서의 iframe 사용을 허용
+                // 예외 처리 핸들러 추가
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.getWriter().write("Unauthorized access - please login first");
+                        })
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            response.getWriter().write("Access Denied - insufficient permissions");
+                        })
+                );
         return http.build();
 
     }

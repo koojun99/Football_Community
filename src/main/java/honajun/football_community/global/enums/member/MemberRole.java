@@ -1,4 +1,4 @@
-package honajun.football_community.global.enums;
+package honajun.football_community.global.enums.member;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
