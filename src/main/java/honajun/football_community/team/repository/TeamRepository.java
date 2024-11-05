@@ -1,5 +1,6 @@
 package honajun.football_community.team.repository;
 
+import honajun.football_community.team.entity.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
