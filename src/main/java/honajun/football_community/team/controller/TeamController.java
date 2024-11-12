@@ -14,7 +14,7 @@ import honajun.football_community.team.service.TeamService;
 @RequiredArgsConstructor
 @RequestMapping("/wiki/team")
 public class TeamController {
-    
+
     private final TeamService teamService;
 
     @Operation(summary = "팀 위키 조회", description = "팀 위키 페이지를 조회합니다.")

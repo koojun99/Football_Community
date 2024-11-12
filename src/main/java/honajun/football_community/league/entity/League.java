@@ -21,12 +21,15 @@ public class League {
     private String country;
 
     @Column(nullable = false)
-    private String division;
+    private Integer division;
 
     @Column
     private String founded;
 
     @Column
     private String mostRecentChampion;
+
+    @Column
+    private String mostWinningTeam;
 
 }

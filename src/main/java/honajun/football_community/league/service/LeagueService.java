@@ -1,5 +1,8 @@
 package honajun.football_community.league.service;
 
+import honajun.football_community.league.dto.LeagueResponseDTO;
+import honajun.football_community.league.entity.League;
+import honajun.football_community.league.mapper.LeagueMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -7,6 +10,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LeagueService {
 
-    private final LeagueCommandAdapter LeagueCommandAdapter;
-    private final LeagueQueryAdapter LeagueQueryAdapter;
+    private final LeagueCommandAdapter leagueCommandAdapter;
+    private final LeagueQueryAdapter leagueQueryAdapter;
+
+    public LeagueResponseDTO.getLeagueWiki getLeagueWiki(Long leagueId) {
+        League league = leagueQueryAdapter.findById(leagueId);
+        return LeagueMapper.toGetLeagueWiki(league);
+    }
 }
