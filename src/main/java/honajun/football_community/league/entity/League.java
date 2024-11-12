@@ -14,4 +14,19 @@ public class League {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
+    private String name;
+
+    @Column(nullable = false)
+    private String country;
+
+    @Column(nullable = false)
+    private String division;
+
+    @Column
+    private String founded;
+
+    @Column
+    private String mostRecentChampion;
+
 }
