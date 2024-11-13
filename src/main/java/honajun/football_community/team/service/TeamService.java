@@ -13,10 +13,4 @@ public class TeamService {
 
     private final TeamCommandAdapter teamCommandAdapter;
     private final TeamQueryAdapter teamQueryAdapter;
-
-    @Transactional(readOnly = true)
-    public TeamResponseDTO.getTeamWiki getTeamWiki(Long teamId) {
-        Team team = teamQueryAdapter.findById(teamId);
-        return TeamMapper.toGetTeamWiki(team);
-    }
 }

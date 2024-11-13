@@ -1,10 +1,9 @@
 package honajun.football_community.team.entity;
 
 import honajun.football_community.league.entity.League;
+import honajun.football_community.wiki.entity.Wiki;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDate;
 
 @Entity
 @Builder
@@ -19,15 +18,6 @@ public class Team {
 
     @Column(nullable = false, unique = true)
     private String name;
-
-    @Column
-    private String founded;
-
-    @Column(nullable = false)
-    private String stadium;
-
-    @Column(nullable = false)
-    private String headCoach;
 
     @JoinColumn(name = "league_id", nullable = false)
     @ManyToOne

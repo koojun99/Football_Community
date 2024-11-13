@@ -1,5 +1,6 @@
 package honajun.football_community.league.entity;
 
+import honajun.football_community.wiki.entity.Wiki;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,17 +20,5 @@ public class League {
 
     @Column(nullable = false)
     private String country;
-
-    @Column(nullable = false)
-    private Integer division;
-
-    @Column
-    private String founded;
-
-    @Column
-    private String mostRecentChampion;
-
-    @Column
-    private String mostWinningTeam;
 
 }
