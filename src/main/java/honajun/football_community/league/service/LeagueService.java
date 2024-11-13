@@ -13,8 +13,4 @@ public class LeagueService {
     private final LeagueCommandAdapter leagueCommandAdapter;
     private final LeagueQueryAdapter leagueQueryAdapter;
 
-    public LeagueResponseDTO.getLeagueWiki getLeagueWiki(Long leagueId) {
-        League league = leagueQueryAdapter.findById(leagueId);
-        return LeagueMapper.toGetLeagueWiki(league);
-    }
 }
