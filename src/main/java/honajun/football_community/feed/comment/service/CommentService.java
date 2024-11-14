@@ -39,7 +39,7 @@ public class CommentService {
     public CommentResponseDTO.getCommentId updateComment(Member member, Long commentId, CommentRequestDTO.updateComment request) {
         Comment comment = commentQueryAdapter.findById(commentId);
         if (!comment.isWriter(member.getId())) {
-            throw new FeedException(FeedExceptionCode._WRONG_WRITER);
+            throw new FeedException(FeedExceptionCode.WRONG_WRITER);
         }
         commentCommandAdapter.updateComment(comment, request);
         return CommentMapper.toGetCommentId(comment);
@@ -49,7 +49,7 @@ public class CommentService {
     public void deleteComment(Member member, Long commentId) {
         Comment comment = commentQueryAdapter.findById(commentId);
         if (!comment.isWriter(member.getId())) {
-            throw new FeedException(FeedExceptionCode._WRONG_WRITER);
+            throw new FeedException(FeedExceptionCode.WRONG_WRITER);
         }
         commentCommandAdapter.deleteComment(comment);
     }

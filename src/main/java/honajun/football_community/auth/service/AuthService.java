@@ -37,7 +37,7 @@ public class AuthService {
 
     public void emailDuplicateCheck(String email) {
         if (memberQueryAdapter.existsByEmail(email)) {
-            throw new AuthException(AuthExceptionCode._DUPLICATED_EMAIL);
+            throw new AuthException(AuthExceptionCode.DUPLICATED_EMAIL);
         }
     }
 
@@ -59,7 +59,7 @@ public class AuthService {
 
         // 저장된 인증코드가 없거나 일치하지 않으면 실패
         if (storedCode == null || !storedCode.equals(request.getInputCode())) {
-            throw new AuthException(AuthExceptionCode._INVALID_VERIFICATION_CODE);
+            throw new AuthException(AuthExceptionCode.INVALID_VERIFICATION_CODE);
         }
 
         // 인증 성공 시 Redis에서 해당 인증코드 삭제 (1회용)
@@ -79,7 +79,7 @@ public class AuthService {
         // Role을 SimpleGrantedAuthority로 변환하여 authorities로 만듬
         Collection<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority(String.valueOf(member.getRole())));
         if (!passwordEncoder.matches(request.getPassword(), member.getPassword())) {
-            throw new AuthException(AuthExceptionCode._INVALID_PASSWORD);
+            throw new AuthException(AuthExceptionCode.INVALID_PASSWORD);
         }
         String accessToken = jwtTokenProvider.createAccessToken(member, authorities);
         String refreshToken = jwtTokenProvider.createRefreshToken();
@@ -94,7 +94,7 @@ public class AuthService {
 
     public void changePassword(Member member, AuthRequestDTO.changePassword request) {
         if (!passwordEncoder.matches(request.getCurrentPassword(), member.getPassword())) {
-            throw new AuthException(AuthExceptionCode._INVALID_PASSWORD);
+            throw new AuthException(AuthExceptionCode.INVALID_PASSWORD);
         }
         memberCommandAdapter.changePassword(member, passwordEncoder.encode(request.getNewPassword()));
     }

@@ -13,6 +13,6 @@ public class CategoryQueryAdapter {
 
     public Category findById(Long categoryId) {
         return categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new FeedException(FeedExceptionCode._CATEGORY_NOT_FOUND));
+                .orElseThrow(() -> new FeedException(FeedExceptionCode.CATEGORY_NOT_FOUND));
     }
 }

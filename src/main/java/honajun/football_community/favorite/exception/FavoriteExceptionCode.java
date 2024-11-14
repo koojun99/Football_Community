@@ -1,4 +1,4 @@
-package honajun.football_community.feed.exception;
+package honajun.football_community.favorite.exception;
 
 import honajun.football_community.global.response.code.BaseCode;
 import honajun.football_community.global.response.code.Reason;
@@ -6,29 +6,16 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-import static org.springframework.http.HttpStatus.*;
-
 @Getter
 @AllArgsConstructor
-public enum FeedExceptionCode implements BaseCode {
+public enum FavoriteExceptionCode implements BaseCode {
 
-    // 403
-    WRONG_WRITER(FORBIDDEN, "FEED403_1", "작성자만 수정할 수 있습니다."),
+    // 400
+    INVALID_FAVORITE_TARGET(HttpStatus.BAD_REQUEST, "FAVORITE400_1", "잘못된 즐겨찾기 대상입니다."),
 
-    // Category + 404
-    CATEGORY_NOT_FOUND(NOT_FOUND, "FEED404_1", "카테고리를 찾을 수 없습니다."),
-
-    // Post + 404
-    _POST_NOT_FOUND(NOT_FOUND, "FEED404_2", "게시글을 찾을 수 없습니다."),
-
-    // Comment + 404
-    _COMMENT_NOT_FOUND(NOT_FOUND, "FEED404_3", "댓글을 찾을 수 없습니다."),
-
-    // Report + 409
-    _REPORT_ALREADY_EXISTS(CONFLICT, "FEED409_1", "이미 신고한 게시물 또는 댓글 입니다."),
-
+    // 404
+    FAVORITE_NOT_FOUND(HttpStatus.NOT_FOUND, "FAVORITE404_1", "즐겨찾기 정보를 찾을 수 없습니다."),
     ;
-
 
     private final HttpStatus httpStatus;
     private final String code;

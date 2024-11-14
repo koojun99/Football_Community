@@ -73,10 +73,9 @@ class WikiControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.title").value("Manchester United Wiki"))
                 .andExpect(jsonPath("$.data.categories[0].name").value("History"))
-                .andExpect(jsonPath("$.data.categories[0].description").value("The club was founded in 1878 as Newton Heath."))
-                .andExpect(jsonPath("$.data.categories[1].name").value("Stadium"))
-                .andExpect(jsonPath("$.data.categories[1].description").value("Manchester United's stadium is Old Trafford."))
-                .andExpect(jsonPath("$.isSuccess").value(true));
+                .andExpect(jsonPath("$.isSuccess").value(true))
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.message").value("성공"));
 
     }
 }

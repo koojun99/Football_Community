@@ -39,7 +39,7 @@ public class PostService {
     public PostResponseDTO.getPostId updatePost(Member member, Long postId, PostRequestDTO.updatePost request) {
         Post post = postQueryAdapter.findById(postId);
         if (!post.isWriter(member.getId())) {
-            throw new FeedException(FeedExceptionCode._WRONG_WRITER);
+            throw new FeedException(FeedExceptionCode.WRONG_WRITER);
         }
         postCommandAdapter.updatePost(post, request);
         return PostMapper.toGetPostId(post);
@@ -49,7 +49,7 @@ public class PostService {
     public void deletePost(Member member, Long postId) {
         Post post = postQueryAdapter.findById(postId);
         if (!post.isWriter(member.getId())) {
-            throw new FeedException(FeedExceptionCode._WRONG_WRITER);
+            throw new FeedException(FeedExceptionCode.WRONG_WRITER);
         }
         postCommandAdapter.deletePost(post);
     }
