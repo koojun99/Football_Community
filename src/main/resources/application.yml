@@ -47,3 +47,8 @@ server:
       charset: UTF-8
       enabled: true
       force: true
+
+football-api:
+  base-url: https://api-football-v1.p.rapidapi.com/v3/fixtures
+  api-key: ${FOOTBALL_API_KEY}
+  api-host: https://${FOOTBALL_API_HOST}
