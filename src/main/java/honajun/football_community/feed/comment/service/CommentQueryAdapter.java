@@ -15,6 +15,6 @@ public class CommentQueryAdapter {
 
     public Comment findById(Long commentId) {
         return commentRepository.findById(commentId)
-                .orElseThrow(() -> new FeedException(FeedExceptionCode._COMMENT_NOT_FOUND));
+                .orElseThrow(() -> new FeedException(FeedExceptionCode.COMMENT_NOT_FOUND));
     }
 }

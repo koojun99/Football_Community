@@ -15,6 +15,6 @@ public class LeagueQueryAdapter {
 
     public League findById(Long leagueId) {
         return LeagueRepository.findById(leagueId)
-                .orElseThrow(() -> new LeagueException(LeagueExceptionCode._LEAGUE_NOT_FOUND));
+                .orElseThrow(() -> new LeagueException(LeagueExceptionCode.LEAGUE_NOT_FOUND));
     }
 }

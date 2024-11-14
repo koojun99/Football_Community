@@ -15,6 +15,6 @@ public class TeamQueryAdapter {
 
     public Team findById(Long teamId) {
         return TeamRepository.findById(teamId)
-                .orElseThrow(() -> new TeamException(TeamExceptionCode._TEAM_NOT_FOUND));
+                .orElseThrow(() -> new TeamException(TeamExceptionCode.TEAM_NOT_FOUND));
     }
 }

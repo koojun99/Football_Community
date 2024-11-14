@@ -15,6 +15,6 @@ public class WikiQueryAdapter {
 
     public Wiki findById(Long wikiId) {
         return wikiRepository.findById(wikiId).orElseThrow(() -> new WikiException(
-                WikiExceptionCode._WIKI_NOT_FOUND));
+                WikiExceptionCode.WIKI_NOT_FOUND));
     }
 }

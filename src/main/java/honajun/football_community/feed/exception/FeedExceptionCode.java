@@ -19,13 +19,13 @@ public enum FeedExceptionCode implements BaseCode {
     CATEGORY_NOT_FOUND(NOT_FOUND, "FEED404_1", "카테고리를 찾을 수 없습니다."),
 
     // Post + 404
-    _POST_NOT_FOUND(NOT_FOUND, "FEED404_2", "게시글을 찾을 수 없습니다."),
+    POST_NOT_FOUND(NOT_FOUND, "FEED404_2", "게시글을 찾을 수 없습니다."),
 
     // Comment + 404
-    _COMMENT_NOT_FOUND(NOT_FOUND, "FEED404_3", "댓글을 찾을 수 없습니다."),
+    COMMENT_NOT_FOUND(NOT_FOUND, "FEED404_3", "댓글을 찾을 수 없습니다."),
 
     // Report + 409
-    _REPORT_ALREADY_EXISTS(CONFLICT, "FEED409_1", "이미 신고한 게시물 또는 댓글 입니다."),
+    REPORT_ALREADY_EXISTS(CONFLICT, "FEED409_1", "이미 신고한 게시물 또는 댓글 입니다."),
 
     ;
 

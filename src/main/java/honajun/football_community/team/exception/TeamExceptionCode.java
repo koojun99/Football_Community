@@ -13,7 +13,7 @@ import static org.springframework.http.HttpStatus.*;
 public enum TeamExceptionCode implements BaseCode {
 
     // 404
-    _TEAM_NOT_FOUND(NOT_FOUND, "TEAM404_1", "팀을 찾을 수 없습니다."),
+    TEAM_NOT_FOUND(NOT_FOUND, "TEAM404_1", "팀을 찾을 수 없습니다."),
     ;
 
     private final HttpStatus httpStatus;

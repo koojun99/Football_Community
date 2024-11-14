@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 public enum LeagueExceptionCode implements BaseCode {
 
     // 404
-    _LEAGUE_NOT_FOUND(HttpStatus.NOT_FOUND, "LEAGUE404_1", "리그를 찾을 수 없습니다."),
+    LEAGUE_NOT_FOUND(HttpStatus.NOT_FOUND, "LEAGUE404_1", "리그를 찾을 수 없습니다."),
     ;
 
     private final HttpStatus httpStatus;
