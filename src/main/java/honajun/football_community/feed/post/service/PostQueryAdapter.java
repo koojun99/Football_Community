@@ -15,6 +15,6 @@ public class PostQueryAdapter {
 
     public Post findById(Long postId) {
         return postRepository.findById(postId)
-                .orElseThrow(() -> new FeedException(FeedExceptionCode._POST_NOT_FOUND));
+                .orElseThrow(() -> new FeedException(FeedExceptionCode.POST_NOT_FOUND));
     }
 }

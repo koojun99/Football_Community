@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 public enum WikiExceptionCode implements BaseCode {
 
     // 404
-    _WIKI_NOT_FOUND(HttpStatus.NOT_FOUND, "WIKI404_1", "해당 위키 페이지를 찾을 수 없습니다."),
+    WIKI_NOT_FOUND(HttpStatus.NOT_FOUND, "WIKI404_1", "해당 위키 페이지를 찾을 수 없습니다."),
     ;
 
     private final HttpStatus httpStatus;

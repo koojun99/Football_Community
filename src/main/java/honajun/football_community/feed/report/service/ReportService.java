@@ -31,7 +31,7 @@ public class ReportService {
     public ReportResponseDTO.onSuccess createReport(Member member, Long targetId, ReportRequestDTO.createReport request) {
 
         if (reportQueryAdapter.existsReport(member, targetId, request)) {
-            throw new FeedException(FeedExceptionCode._REPORT_ALREADY_EXISTS);
+            throw new FeedException(FeedExceptionCode.REPORT_ALREADY_EXISTS);
         }
         Report savedReport = createReportBasedOnTargetType(member, targetId, request);
 
