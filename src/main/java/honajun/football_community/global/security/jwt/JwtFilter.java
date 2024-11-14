@@ -44,7 +44,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         } catch (Exception e) {
             log.error("JWT 필터에서 예외 발생: {}", e.getMessage());
-            jwtExceptionHandler(response, AuthExceptionCode._INVALID_TOKEN); // 적절한 예외 코드 사용
+            jwtExceptionHandler(response, AuthExceptionCode.INVALID_TOKEN); // 적절한 예외 코드 사용
         }
     }
 

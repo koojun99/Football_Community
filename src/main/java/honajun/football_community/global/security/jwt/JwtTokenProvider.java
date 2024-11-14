@@ -117,7 +117,7 @@ public class JwtTokenProvider {
             log.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
         } catch (ExpiredJwtException e) {
             log.info("Expired JWT token, 만료된 JWT token 입니다.");
-            throw new AuthException(AuthExceptionCode._TOKEN_EXPIRED);
+            throw new AuthException(AuthExceptionCode.TOKEN_EXPIRED);
 
         } catch (UnsupportedJwtException e) {
             log.error("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.");
@@ -135,20 +135,20 @@ public class JwtTokenProvider {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(refreshToken);
         } catch (SecurityException | MalformedJwtException e) {
             log.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
-            throw new AuthException(AuthExceptionCode._INVALID_TOKEN);
+            throw new AuthException(AuthExceptionCode.INVALID_TOKEN);
         } catch (ExpiredJwtException e) {
             log.info("Expired JWT token, 만료된 JWT 리프레시 token 입니다.");
-            throw new AuthException(AuthExceptionCode._REFRESH_TOKEN_EXPIRED);
+            throw new AuthException(AuthExceptionCode.REFRESH_TOKEN_EXPIRED);
         } catch (UnsupportedJwtException e) {
             log.error("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.");
-            throw new AuthException(AuthExceptionCode._INVALID_TOKEN);
+            throw new AuthException(AuthExceptionCode.INVALID_TOKEN);
         } catch (IllegalArgumentException e) {
             log.error("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
-            throw new AuthException(AuthExceptionCode._INVALID_TOKEN);
+            throw new AuthException(AuthExceptionCode.INVALID_TOKEN);
         }
         catch (io.jsonwebtoken.security.SignatureException e){
             log.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다");
-            throw new AuthException(AuthExceptionCode._INVALID_TOKEN);
+            throw new AuthException(AuthExceptionCode.INVALID_TOKEN);
         }
     }
 

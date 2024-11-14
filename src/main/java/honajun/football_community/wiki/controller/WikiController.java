@@ -12,7 +12,7 @@ import honajun.football_community.wiki.service.WikiService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/wiki")
+@RequestMapping("/wikis")
 public class WikiController {
 
     private final WikiService wikiService;
