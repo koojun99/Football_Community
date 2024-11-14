@@ -60,7 +60,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**").permitAll() // /auth/** 경로에 대한 접근 허용
                         .requestMatchers("/members/**").permitAll() // /member/** 경로에 대한 접근 허용
                         .requestMatchers(HttpMethod.GET, "/feed/posts/{postId}").permitAll() // /feed/posts/** 경로에 대한 접근 허용
-                        .requestMatchers(HttpMethod.GET, "/wiki/**").permitAll() // /wiki/** 경로에 대한 접근 허용
+                        .requestMatchers(HttpMethod.GET, "/wikis/**").permitAll() // /wiki/** 경로에 대한 접근 허용
                         .anyRequest().authenticated() // 그 외 모든 요청에 대해 인증을 요구합니다.
                 )
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 관리를 Stateless로 설정
