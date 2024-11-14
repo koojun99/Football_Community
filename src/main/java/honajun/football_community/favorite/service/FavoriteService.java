@@ -1,7 +1,7 @@
 package honajun.football_community.favorite.service;
 
-import honajun.football_community.favorite.FavoriteRequestDTO;
-import honajun.football_community.favorite.FavoriteResponseDTO;
+import honajun.football_community.favorite.dto.FavoriteRequestDTO;
+import honajun.football_community.favorite.dto.FavoriteResponseDTO;
 import honajun.football_community.favorite.entity.Favorite;
 import honajun.football_community.favorite.exception.FavoriteException;
 import honajun.football_community.favorite.exception.FavoriteExceptionCode;
@@ -10,9 +10,9 @@ import honajun.football_community.global.enums.favorite.FavoriteType;
 import honajun.football_community.league.service.LeagueQueryAdapter;
 import honajun.football_community.member.entity.Member;
 import honajun.football_community.team.service.TeamQueryAdapter;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import honajun.football_community.favorite.service.FavoriteQueryAdapter;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -48,5 +48,17 @@ public class FavoriteService {
         Favorite favorite = favoriteQueryAdapter.findById(favoriteId);
 
         favoriteCommandAdapter.delete(favorite);
+    }
+
+    public void toggleNotification(Member member, Long favoriteId) {
+        Favorite favorite = favoriteQueryAdapter.findById(favoriteId);
+        favorite.toggleNotification();
+        favoriteCommandAdapter.save(favorite);
+    }
+
+    @Transactional(readOnly = true)
+    public FavoriteResponseDTO.getFavorites getFavorites(Member member) {
+        List<Favorite> favorites = favoriteQueryAdapter.findAllByMember(member);
+        return FavoriteMapper.toGetFavorites(favorites);
     }
 }

@@ -6,10 +6,11 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import honajun.football_community.favorite.controller.FavoriteController;
+import honajun.football_community.favorite.dto.FavoriteRequestDTO;
+import honajun.football_community.favorite.dto.FavoriteResponseDTO;
 import honajun.football_community.favorite.service.FavoriteCommandAdapter;
 import honajun.football_community.favorite.service.FavoriteQueryAdapter;
 import honajun.football_community.favorite.service.FavoriteService;

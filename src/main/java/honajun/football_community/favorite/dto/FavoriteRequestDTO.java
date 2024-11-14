@@ -1,4 +1,4 @@
-package honajun.football_community.favorite;
+package honajun.football_community.favorite.dto;
 
 import honajun.football_community.global.enums.favorite.FavoriteType;
 import lombok.*;

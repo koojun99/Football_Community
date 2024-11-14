@@ -29,4 +29,8 @@ public class Favorite {
 
     @Column(nullable = false)
     private boolean isPushed; // 알림 활성화 여부 (삭제 시 비활성화 처리)
+
+    public void toggleNotification() {
+        this.isPushed = !this.isPushed;
+    }
 }
