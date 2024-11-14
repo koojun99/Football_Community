@@ -1,5 +1,6 @@
 package honajun.football_community.wiki.mapper;
 
+import honajun.football_community.wiki.WikiRequestDTO.createCategory;
 import honajun.football_community.wiki.dto.WikiResponseDTO;
 import honajun.football_community.wiki.dto.WikiResponseDTO.getCategory;
 import honajun.football_community.wiki.entity.Wiki;
@@ -14,6 +15,14 @@ public class WikiMapper {
                 .id(wiki.getId())
                 .title(wiki.getTitle())
                 .categories(toGetCategories(wiki.getCategories()))
+                .build();
+    }
+
+    public static WikiCategory toWikiCategory(Wiki wiki, createCategory request) {
+        return WikiCategory.builder()
+                .wiki(wiki)
+                .name(request.getName())
+                .description(request.getDescription())
                 .build();
     }
 

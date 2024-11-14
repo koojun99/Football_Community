@@ -4,13 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 @Getter
 @AllArgsConstructor
 public enum SuccessStatus implements BaseCode{
-    _SUCCESS(OK, "200", "성공"),
-    _NOCONTENT(OK, "204", "콘텐츠 없음");
+    SUCCESS(OK, "200", "성공"),
+    NO_CONTENT(HttpStatus.NO_CONTENT, "204", "콘텐츠 없음");
 
     private final HttpStatus httpStatus;
     private final String code;

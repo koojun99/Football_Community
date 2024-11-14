@@ -33,4 +33,8 @@ public class WikiCategory extends BaseDateTimeEntity {
     @ManyToOne
     @JoinColumn(name = "wiki_id")
     private Wiki wiki;
+
+    public void update(String content) {
+        this.description = content;
+    }
 }
