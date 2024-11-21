@@ -39,7 +39,8 @@ public class SecurityConfig {
         return (web) ->
                 web.ignoring()
                         .requestMatchers(
-                                "/health",
+                                "/health/**",
+                                "/actuator/**",
                                 "/schedule",
                                 "/v3/api-docs",
                                 "/v3/api-docs/**",

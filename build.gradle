@@ -61,6 +61,7 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
 
     // QueryDSL
+    implementation "com.querydsl:querydsl-core:5.0.0"
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
@@ -72,9 +73,31 @@ dependencies {
     //okhttp
     implementation 'com.squareup.okhttp3:okhttp:4.9.3'
 
+    // logback
+    implementation 'com.github.loki4j:loki-logback-appender:1.5.1'
+
+    // actuator
+    implementation("org.springframework.boot:spring-boot-starter-actuator:3.3.0")
+
+    // prometheus
+    runtimeOnly("io.micrometer:micrometer-registry-prometheus:1.13.0")
+
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+def generated='src/main/generated'
+sourceSets {
+    main.java.srcDirs += [ generated ]
+}
+
+tasks.withType(JavaCompile) {
+    options.annotationProcessorGeneratedSourcesDirectory = file(generated)
+}
+
+clean.doLast {
+    file(generated).deleteDir()
 }
 
 tasks.named('test') {

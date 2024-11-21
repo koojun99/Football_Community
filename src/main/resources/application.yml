@@ -2,8 +2,20 @@ logging:
   file:
     encoding: UTF-8
 
+# actuator 설정
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" # open 할 actuator 경로 설정
+  endpoint:
+    health:
+      show-details: always # actuator/health 에 디테일 정보 반환
+
 
 spring:
+  profiles:
+    active: local
   data:
     redis:
       host: localhost

@@ -3,6 +3,7 @@ package honajun.football_community.favorite.service;
 import honajun.football_community.favorite.entity.Favorite;
 import honajun.football_community.favorite.exception.FavoriteException;
 import honajun.football_community.favorite.exception.FavoriteExceptionCode;
+import honajun.football_community.global.enums.favorite.FavoriteType;
 import honajun.football_community.member.entity.Member;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,5 +23,9 @@ public class FavoriteQueryAdapter {
 
     public List<Favorite> findAllByMember(Member member) {
         return favoriteRepository.findAllByMember(member);
+    }
+
+    public boolean existsByMemberAndTargetIdAndFavoriteType(Member member, Long targetId, FavoriteType favoriteType) {
+        return favoriteRepository.existsByMemberAndTargetIdAndFavoriteType(member, targetId, favoriteType);
     }
 }
