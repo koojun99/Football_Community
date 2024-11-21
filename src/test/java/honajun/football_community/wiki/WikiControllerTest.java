@@ -69,7 +69,7 @@ class WikiControllerTest {
         when(wikiService.getWiki(wikiId)).thenReturn(mockResponse);
 
         // MockMvc로 테스트
-        mockMvc.perform(get("/wiki/{wikiId}", wikiId))
+        mockMvc.perform(get("/wikis/{wikiId}", wikiId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.title").value("Manchester United Wiki"))
                 .andExpect(jsonPath("$.data.categories[0].name").value("History"))

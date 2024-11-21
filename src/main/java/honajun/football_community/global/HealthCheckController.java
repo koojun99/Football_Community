@@ -2,7 +2,11 @@ package honajun.football_community.global;
 
 import honajun.football_community.global.response.CommonResponse;
 import io.swagger.v3.oas.annotations.Hidden;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,6 +21,8 @@ public class HealthCheckController {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    private static final Logger logger = LoggerFactory.getLogger(HealthCheckController.class);
 
     @GetMapping
     public CommonResponse<String> healthCheck() {
@@ -33,9 +39,11 @@ public class HealthCheckController {
         }
     }
 
+
     @GetMapping("/test-error")
-    public ResponseEntity<String> testInternalServerError() {
-        throw new RuntimeException("내부 서버 오류 테스트");
+    public String testInternalServerError()  {
+        logger.info("Attempted access to / endpoint resulted in 403 Forbidden");
+        return null;
     }
 }
 

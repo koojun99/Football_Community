@@ -15,7 +15,9 @@ public enum FavoriteExceptionCode implements BaseCode {
 
     // 404
     FAVORITE_NOT_FOUND(HttpStatus.NOT_FOUND, "FAVORITE404_1", "즐겨찾기 정보를 찾을 수 없습니다."),
-    ;
+
+    // 409
+    DUPLICATE_FAVORITE(HttpStatus.CONFLICT,"FAVORITE409_1" ,"이미 즐겨찾기한 대상입니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

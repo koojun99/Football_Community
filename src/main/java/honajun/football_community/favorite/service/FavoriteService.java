@@ -26,11 +26,19 @@ public class FavoriteService {
 
     @Transactional
     public FavoriteResponseDTO.getFavorite addFavorite(Member member, FavoriteRequestDTO.addFavorite request) {
+        validateDuplicateFavorite(member, request.getTargetId(), request.getFavoriteType());
         // 대상 유효성 검증
         validateTarget(request.getTargetId(), request.getFavoriteType());
         Favorite favorite = FavoriteMapper.toFavorite(member, request);
         favoriteCommandAdapter.save(favorite);
         return FavoriteMapper.toGetFavorite(favorite);
+    }
+
+    private void validateDuplicateFavorite(Member member, Long targetId, FavoriteType favoriteType) {
+        boolean exists = favoriteQueryAdapter.existsByMemberAndTargetIdAndFavoriteType(member, targetId, favoriteType);
+        if (exists) {
+            throw new FavoriteException(FavoriteExceptionCode.DUPLICATE_FAVORITE);
+        }
     }
 
     private void validateTarget(Long targetId, FavoriteType favoriteType) {
