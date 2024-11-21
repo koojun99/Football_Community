@@ -11,7 +11,7 @@
             <!-- 출력패턴 설정-->
             <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
                 <charset>UTF-8</charset>
-                <pattern>[ls] [%23d{yyyy_MM_dd_'T'_HH_mm_ss_SSS_z}] [%-5level] [%msg] [le]%n
+                <pattern>[ls] [%23d{yyyy_MM_dd_'T':HH:mm:ss:SSS_z}] [%-5level] [%msg] [le]%n
                 </pattern>
             </encoder>
 

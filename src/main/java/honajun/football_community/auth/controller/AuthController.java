@@ -73,4 +73,5 @@ public class AuthController {
         authService.changePassword(member, request);
         return CommonResponse.onNoContent();
     }
+
 }

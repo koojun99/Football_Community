@@ -1,6 +1,11 @@
 package honajun.football_community.global.config;
 
 import honajun.football_community.global.security.jwt.JwtFilter;
+import honajun.football_community.global.security.jwt.JwtTokenProvider;
+import honajun.football_community.global.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
+import honajun.football_community.global.security.oauth2.service.CustomOAuth2UserService;
+import honajun.football_community.global.security.oauth2.handler.OAuth2AuthenticationFailureHandler;
+import honajun.football_community.global.security.oauth2.handler.OAuth2AuthenticationSuccessHandler;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -26,7 +31,11 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtFilter jwtFilter;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+    private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     // 비밀번호 암호화를 위한 PasswordEncoder 빈을 생성
     @Bean
@@ -44,6 +53,7 @@ public class SecurityConfig {
                                 "/schedule",
                                 "/v3/api-docs",
                                 "/v3/api-docs/**",
+                                "/error",
                                 "/favicon.io",
                                 "/swagger-ui/**",
                                 "/docs/**");
@@ -55,10 +65,11 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable) // CSRF 보호를 비활성화
                 .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfiguration())) // Spring Security의 기본 CORS 처리 비활성화
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class) // JwtFilter를 UsernamePasswordAuthenticationFilter 앞에 추가
+                .addFilterBefore(new JwtFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class) // JwtFilter를 UsernamePasswordAuthenticationFilter 앞에 추가
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // 정적 리소스에 대한 접근 허용
                         .requestMatchers("/auth/**").permitAll() // /auth/** 경로에 대한 접근 허용
+                        .requestMatchers("/login/oauth2/**").permitAll() // /login/oauth2/** 경로에 대한 접근 허용
                         .requestMatchers("/members/**").permitAll() // /member/** 경로에 대한 접근 허용
                         .requestMatchers(HttpMethod.GET, "/feed/posts/{postId}").permitAll() // /feed/posts/** 경로에 대한 접근 허용
                         .requestMatchers(HttpMethod.GET, "/wikis/**").permitAll() // /wiki/** 경로에 대한 접근 허용
@@ -77,6 +88,12 @@ public class SecurityConfig {
                             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                             response.getWriter().write("Access Denied - insufficient permissions");
                         })
+                )
+                .oauth2Login(configure ->
+                        configure.authorizationEndpoint(config -> config.authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository))
+                                .userInfoEndpoint(config -> config.userService(customOAuth2UserService))
+                                .successHandler(oAuth2AuthenticationSuccessHandler)
+                                .failureHandler(oAuth2AuthenticationFailureHandler)
                 );
         return http.build();
 
