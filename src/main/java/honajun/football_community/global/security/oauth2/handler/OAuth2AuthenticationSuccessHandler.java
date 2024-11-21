@@ -59,7 +59,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 .map(Cookie::getValue)
                 .orElse("");
 
-        log.info("Retrieved redirectUri: {}, mode: {}", redirectUri.orElse("null"), mode);
 
         OAuth2UserPrincipal principal = getOAuth2UserPrincipal(authentication);
         System.out.println("principal = " + principal);
@@ -72,7 +71,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
 
         if ("login".equalsIgnoreCase(mode)) {
-            log.info("OAuth2UserPrincipal 정보: {}", principal);
 
             String accessToken = principal.getJwtAccessToken(); // JWT Access Token
             String refreshToken = principal.getJwtRefreshToken(); // 필요 시 JwtTokenProvider로 생성
@@ -83,12 +81,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                         .build().toUriString();
             }
 
-            log.info("로그인 성공: accessToken={}, refreshToken={}", accessToken, refreshToken);
+            CookieUtils.addCookie(response, "access_token", accessToken, 3600); // 1시간 유효
+            CookieUtils.addCookie(response, "refresh_token", refreshToken, 14 * 24 * 60 * 60); // 14일 유효
 
-            return UriComponentsBuilder.fromUriString(targetUrl)
-                    .queryParam("access_token", accessToken)
-                    .queryParam("refresh_token", refreshToken)
-                    .build().toUriString();
+            return targetUrl;
 
         } else if ("unlink".equalsIgnoreCase(mode)) {
 

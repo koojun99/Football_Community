@@ -71,8 +71,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Collection<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority(String.valueOf(member.getRole())));
         String jwtAccessToken = jwtTokenProvider.createAccessToken(member, authorities);
         String jwtRefreshToken = jwtTokenProvider.createRefreshToken();
-        log.info("AccessToken 생성: {}", jwtAccessToken);
-        log.info("RefreshToken 생성: {}", jwtRefreshToken);
 
         // 유저 정보를 OAuth2UserPrincipal에 저장
         OAuth2UserPrincipal principal = new OAuth2UserPrincipal(oAuth2UserInfo);

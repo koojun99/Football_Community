@@ -45,18 +45,14 @@ public class HttpCookieOAuth2AuthorizationRequestRepository
                 CookieUtils.serialize(authorizationRequest),
                 COOKIE_EXPIRE_SECONDS);
 
-        log.info("Saved OAuth2AuthorizationRequest Cookie: {}", authorizationRequest);
 
 
         String redirectUriAfterLogin = request.getParameter(REDIRECT_URI_PARAM_COOKIE_NAME);
-        log.info("Request redirectUri: {}", request.getParameter(REDIRECT_URI_PARAM_COOKIE_NAME));
-        log.info("Request mode: {}", request.getParameter(MODE_PARAM_COOKIE_NAME));
         if (StringUtils.hasText(redirectUriAfterLogin)) {
             CookieUtils.addCookie(response,
                     REDIRECT_URI_PARAM_COOKIE_NAME,
                     redirectUriAfterLogin,
                     COOKIE_EXPIRE_SECONDS);
-            log.info("Saved redirectUri Cookie: {}", redirectUriAfterLogin);
         } else {
             log.warn("RedirectUri Cookie is not found");
         }
@@ -67,7 +63,6 @@ public class HttpCookieOAuth2AuthorizationRequestRepository
                     MODE_PARAM_COOKIE_NAME,
                     mode,
                     COOKIE_EXPIRE_SECONDS);
-            log.info("Saved mode Cookie: {}", mode);
         } else {
             log.warn("Mode Cookie is not found");
         }
