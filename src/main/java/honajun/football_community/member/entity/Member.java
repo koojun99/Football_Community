@@ -3,6 +3,7 @@ package honajun.football_community.member.entity;
 import honajun.football_community.global.common.BaseDateTimeEntity;
 import honajun.football_community.global.enums.member.MemberRole;
 import honajun.football_community.global.enums.member.MemberStatus;
+import honajun.football_community.global.security.util.AESAttributeConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,12 +28,14 @@ public class Member extends BaseDateTimeEntity {
     private String username;
 
     @Column(nullable = false, unique = true)
+    @Convert(converter = AESAttributeConverter.class)
     private String email;
 
     @Column(nullable = true)
     private String password;
 
     @Column(unique = true)
+    @Convert(converter = AESAttributeConverter.class)
     private String phoneNumber;
 
     @Column
