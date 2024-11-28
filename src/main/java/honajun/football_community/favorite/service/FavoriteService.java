@@ -35,7 +35,7 @@ public class FavoriteService {
     }
 
     private void validateDuplicateFavorite(Member member, Long targetId, FavoriteType favoriteType) {
-        boolean exists = favoriteQueryAdapter.existsByMemberAndTargetIdAndFavoriteType(member, targetId, favoriteType);
+        boolean exists = favoriteQueryAdapter.existsByMemberAndTargetIdAndFavoriteType(member, targetId, favoriteType).isPresent();
         if (exists) {
             throw new FavoriteException(FavoriteExceptionCode.DUPLICATE_FAVORITE);
         }

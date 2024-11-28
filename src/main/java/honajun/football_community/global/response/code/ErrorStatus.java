@@ -15,6 +15,7 @@ public enum ErrorStatus implements BaseCode {
     _BAD_REQUEST(BAD_REQUEST, "COMMON400_1", "잘못된 요청입니다."),
     _UNAUTHORIZED(UNAUTHORIZED, "COMMON401_1", "로그인이 필요합니다."),
     _FORBIDDEN(FORBIDDEN, "COMMON403_1", "금지된 요청입니다."),
+    _TOO_MANY_REQUESTS(TOO_MANY_REQUESTS, "COMMON429_1", "요청이 너무 많습니다. 잠시 후 다시 시도해주세요."),
     ;
 
     private final HttpStatus httpStatus;

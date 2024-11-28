@@ -5,6 +5,7 @@ import honajun.football_community.wiki.entity.Wiki;
 import honajun.football_community.wiki.entity.WikiCategory;
 import honajun.football_community.wiki.exception.WikiException;
 import honajun.football_community.wiki.exception.WikiExceptionCode;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import honajun.football_community.global.annotation.Adapter;
 import honajun.football_community.wiki.repository.WikiRepository;
@@ -24,5 +25,9 @@ public class WikiQueryAdapter {
     public WikiCategory findWikiCategoryById(Long wikiCategoryId) {
         return wikiCategoryRepository.findById(wikiCategoryId).orElseThrow(() -> new WikiException(
                 WikiExceptionCode.WIKI_CATEGORY_NOT_FOUND));
+    }
+
+    public List<WikiCategory> findWikiCategoriesByWikiId(Long wikiId) {
+        return wikiCategoryRepository.findByWiki_Id(wikiId);
     }
 }

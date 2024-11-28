@@ -10,11 +10,11 @@ import java.util.stream.Collectors;
 
 public class WikiMapper {
 
-    public static WikiResponseDTO.getWiki toGetWiki(Wiki wiki) {
+    public static WikiResponseDTO.getWiki toGetWiki(Wiki wiki, List<WikiCategory> categories) {
         return WikiResponseDTO.getWiki.builder()
                 .id(wiki.getId())
                 .title(wiki.getTitle())
-                .categories(toGetCategories(wiki.getCategories()))
+                .categories(toGetCategories(categories))
                 .build();
     }
 

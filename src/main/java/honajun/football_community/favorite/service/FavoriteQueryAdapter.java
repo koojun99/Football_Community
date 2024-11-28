@@ -6,6 +6,7 @@ import honajun.football_community.favorite.exception.FavoriteExceptionCode;
 import honajun.football_community.global.enums.favorite.FavoriteType;
 import honajun.football_community.member.entity.Member;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import honajun.football_community.global.annotation.Adapter;
 import honajun.football_community.favorite.repository.FavoriteRepository;
@@ -25,7 +26,7 @@ public class FavoriteQueryAdapter {
         return favoriteRepository.findAllByMember(member);
     }
 
-    public boolean existsByMemberAndTargetIdAndFavoriteType(Member member, Long targetId, FavoriteType favoriteType) {
-        return favoriteRepository.existsByMemberAndTargetIdAndFavoriteType(member, targetId, favoriteType);
+    public Optional<Favorite> existsByMemberAndTargetIdAndFavoriteType(Member member, Long targetId, FavoriteType favoriteType) {
+        return favoriteRepository.findByMemberAndTargetIdAndFavoriteTypeWithLock(member, targetId, favoriteType);
     }
 }
