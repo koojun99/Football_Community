@@ -69,6 +69,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // 정적 리소스에 대한 접근 허용
                         .requestMatchers("/auth/**").permitAll() // /auth/** 경로에 대한 접근 허용
+                        .requestMatchers("/actuator/**").permitAll() // /actuator/** 경로에 대한 접근 허용
                         .requestMatchers("/login/oauth2/**").permitAll() // /login/oauth2/** 경로에 대한 접근 허용
                         .requestMatchers("/members/**").permitAll() // /member/** 경로에 대한 접근 허용
                         .requestMatchers(HttpMethod.GET, "/feed/posts/{postId}").permitAll() // /feed/posts/** 경로에 대한 접근 허용
