@@ -1,15 +1,18 @@
 package honajun.football_community.auth.controller;
 
 import honajun.football_community.auth.dto.AuthRequestDTO;
-import honajun.football_community.auth.dto.AuthResponseDTO;
+import honajun.football_community.auth.dto.AuthRequestDTO.login;
 import honajun.football_community.auth.service.AuthService;
 import honajun.football_community.global.annotation.AuthMember;
+import honajun.football_community.global.rate_limiter.RateLimiterService;
 import honajun.football_community.global.response.CommonResponse;
+import honajun.football_community.global.response.code.ErrorStatus;
 import honajun.football_community.member.dto.MemberRequestDTO;
 import honajun.football_community.member.dto.MemberResponseDTO;
 import honajun.football_community.member.entity.Member;
 import honajun.football_community.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +23,7 @@ public class AuthController {
 
     private final AuthService authService;
     private final MemberService memberService;
+    private final RateLimiterService rateLimiterService;
 
     @Operation(summary = "이메일 중복 확인", description = "이메일 중복 확인")
     @GetMapping("/email-verification")
@@ -58,9 +62,13 @@ public class AuthController {
 
     @Operation(summary = "로그인", description = "로그인을 진행합니다")
     @PostMapping("/login")
-    public CommonResponse<AuthResponseDTO.login> login(
-            @RequestBody AuthRequestDTO.login request
+    public CommonResponse login(
+            @RequestBody login request,
+            HttpServletRequest httpServletRequest
     ) {
+        if (!rateLimiterService.isAllowed(httpServletRequest)) {
+            return CommonResponse.onFailure(ErrorStatus._TOO_MANY_REQUESTS, null);
+        }
         return CommonResponse.onSuccess(authService.login(request));
     }
 

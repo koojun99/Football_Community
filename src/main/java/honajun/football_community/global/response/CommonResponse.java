@@ -17,6 +17,8 @@ import lombok.Getter;
 @JsonPropertyOrder({"isSuccess", "code", "message", "data"})
 public class CommonResponse<T> {
 
+
+
     @Override
     public String toString() {
         try {
@@ -64,6 +66,10 @@ public class CommonResponse<T> {
 
     public static <T> CommonResponse<T> onFailure(String code, String message, T data) {
         return new CommonResponse<>(false, code, message, data);
+    }
+
+    public static <T> CommonResponse<T> onFailure(BaseCode code, T data) {
+        return new CommonResponse<>(false, code.getReasonHttpStatus().getCode(), code.getReasonHttpStatus().getMessage(), data);
     }
 
 }

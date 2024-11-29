@@ -5,7 +5,10 @@ import honajun.football_community.wiki.dto.WikiResponseDTO;
 import honajun.football_community.wiki.entity.Wiki;
 import honajun.football_community.wiki.entity.WikiCategory;
 import honajun.football_community.wiki.mapper.WikiMapper;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import honajun.football_community.wiki.service.WikiCommandAdapter;
 import honajun.football_community.wiki.service.WikiQueryAdapter;
@@ -18,10 +21,12 @@ public class WikiService {
     private final WikiCommandAdapter wikiCommandAdapter;
     private final WikiQueryAdapter wikiQueryAdapter;
 
+    @Cacheable(cacheNames = "wikis", key = "#wikiId")
     @Transactional(readOnly = true)
     public WikiResponseDTO.getWiki getWiki(Long wikiId) {
         Wiki wiki = wikiQueryAdapter.findById(wikiId);
-        return WikiMapper.toGetWiki(wiki);
+        List<WikiCategory> categories = wikiQueryAdapter.findWikiCategoriesByWikiId(wikiId);
+        return WikiMapper.toGetWiki(wiki, categories);
     }
 
     @Transactional
@@ -31,6 +36,7 @@ public class WikiService {
         wikiCommandAdapter.createCategory(wikiCategory);
     }
 
+    @CacheEvict(cacheNames = "wikis", key = "#wikiId")
     @Transactional
     public void updateWiki(Long wikiCategoryId, WikiRequestDTO.updateWiki request) {
         WikiCategory wikiCategory = wikiQueryAdapter.findWikiCategoryById(wikiCategoryId);
