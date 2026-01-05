@@ -64,21 +64,41 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable) // CSRF 보호를 비활성화
-                .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfiguration())) // Spring Security의 기본 CORS 처리 비활성화
-                .addFilterBefore(new JwtFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class) // JwtFilter를 UsernamePasswordAuthenticationFilter 앞에 추가
+                .cors(corsConfigurer -> corsConfigurer.configurationSource(
+                        corsConfiguration())) // Spring Security의 기본 CORS 처리 비활성화
+                .addFilterBefore(new JwtFilter(jwtTokenProvider),
+                        UsernamePasswordAuthenticationFilter.class) // JwtFilter를 UsernamePasswordAuthenticationFilter 앞에 추가
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // 정적 리소스에 대한 접근 허용
+                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+                        .permitAll() // 정적 리소스에 대한 접근 허용
                         .requestMatchers("/auth/**").permitAll() // /auth/** 경로에 대한 접근 허용
                         .requestMatchers("/actuator/**").permitAll() // /actuator/** 경로에 대한 접근 허용
                         .requestMatchers("/login/oauth2/**").permitAll() // /login/oauth2/** 경로에 대한 접근 허용
                         .requestMatchers("/members/**").permitAll() // /member/** 경로에 대한 접근 허용
-                        .requestMatchers(HttpMethod.GET, "/feed/posts/{postId}").permitAll() // /feed/posts/** 경로에 대한 접근 허용
+                        .requestMatchers(HttpMethod.GET, "/feed/posts/{postId}")
+                        .permitAll() // /feed/posts/** 경로에 대한 접근 허용
                         .requestMatchers(HttpMethod.GET, "/wikis/**").permitAll() // /wiki/** 경로에 대한 접근 허용
                         .requestMatchers(HttpMethod.GET, "/fixtures/**").permitAll() // /fixtures/** 경로에 대한 접근 허용
                         .anyRequest().authenticated() // 그 외 모든 요청에 대해 인증을 요구합니다.
                 )
-                .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 관리를 Stateless로 설정
-                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))// 동일 출처에서의 iframe 사용을 허용
+                .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(
+                        SessionCreationPolicy.STATELESS)) // 세션 관리를 Stateless로 설정
+                .headers(headers -> { // Content-Security-Policy 설정
+                    headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin); // 동일 출처 iframe 허용
+                    headers.contentSecurityPolicy(csp -> csp
+                            .policyDirectives(
+                                    "default-src 'none'; " +
+                                            "script-src 'self' https://accounts.google.com https://kauth.kakao.com; " +
+                                            "connect-src 'self' https://api.example.com https://kauth.kakao.com; " +
+                                            "child-src 'self'; " +
+                                            "img-src 'self' data: https://cdn.example.com; " +
+                                            "font-src 'self' data: https://fonts.googleapis.com; " +
+                                            "style-src 'self' 'unsafe-inline';" +
+                                            "frame-ancestors 'self'; " +
+                                            "form-action 'self';"
+                            )
+                    );
+                })
                 // 예외 처리 핸들러 추가
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .authenticationEntryPoint((request, response, authException) -> {
@@ -91,7 +111,8 @@ public class SecurityConfig {
                         })
                 )
                 .oauth2Login(configure ->
-                        configure.authorizationEndpoint(config -> config.authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository))
+                        configure.authorizationEndpoint(config -> config.authorizationRequestRepository(
+                                        httpCookieOAuth2AuthorizationRequestRepository))
                                 .userInfoEndpoint(config -> config.userService(customOAuth2UserService))
                                 .successHandler(oAuth2AuthenticationSuccessHandler)
                                 .failureHandler(oAuth2AuthenticationFailureHandler)

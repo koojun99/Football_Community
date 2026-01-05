@@ -48,7 +48,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) {
-        System.out.println("authentication = " + authentication);
 
         Optional<String> redirectUri = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
@@ -61,12 +60,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
 
         OAuth2UserPrincipal principal = getOAuth2UserPrincipal(authentication);
-        System.out.println("principal = " + principal);
 
         if (principal == null) {
-            log.error("Principal is null - targetUrl: {}", targetUrl);
             return UriComponentsBuilder.fromUriString(targetUrl)
-                    .queryParam("error", "Login failed")
                     .build().toUriString();
         }
 
@@ -75,7 +71,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             String accessToken = principal.getJwtAccessToken(); // JWT Access Token
             String refreshToken = principal.getJwtRefreshToken(); // 필요 시 JwtTokenProvider로 생성
             if (accessToken == null) {
-                log.error("AccessToken이 null입니다. principal={}", principal);
                 return UriComponentsBuilder.fromUriString(targetUrl)
                         .queryParam("error", "Login failed")
                         .build().toUriString();
@@ -99,7 +94,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                     .build().toUriString();
         }
 
-        log.error("Login failed - mode not matched or principal missing. targetUrl: {}", targetUrl);
 
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("error", "Login failed")
