@@ -77,13 +77,6 @@ public class RedisConfig {
                 .entryTtl(Duration.ofMinutes(10));
 
         Map<String, RedisCacheConfiguration> cacheConfigurations = new HashMap<>();
-        cacheConfigurations.put("shortCache", RedisCacheConfiguration.defaultCacheConfig()
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(serializer))
-                .entryTtl(Duration.ofSeconds(60))); // 1분 TTL
-
-        cacheConfigurations.put("longCache", RedisCacheConfiguration.defaultCacheConfig()
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(serializer))
-                .entryTtl(Duration.ofHours(1))); // 1시간 TTL
 
         cacheConfigurations.put("teamFixtures", RedisCacheConfiguration.defaultCacheConfig()
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(serializer))
