@@ -257,4 +257,27 @@ public class FixtureApiClient {
             }
         }
     }
+
+    /**
+     * 특정 리그의 이적 정보를 외부 API에서 조회합니다.
+     *
+     * API-Football: GET /transfers?league={leagueId}&season={season}
+     */
+    public String getTransfersByLeague(Long leagueId, String season) throws IOException {
+        String url = String.format("%s/transfers?league=%d&season=%s", BASE_URL, leagueId, season);
+
+        Request request = new Request.Builder()
+                .url(url)
+                .get()
+                .addHeader("x-apisports-key", API_KEY)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                return response.body().string();
+            } else {
+                throw new IOException("Failed to fetch transfers. HTTP Code: " + response.code());
+            }
+        }
+    }
 }

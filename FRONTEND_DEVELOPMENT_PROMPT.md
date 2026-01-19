@@ -414,7 +414,69 @@ GET /fixtures/league/{leagueId}
 
 ---
 
-### 4. Follow 기능
+### 4. 이적시장 (Transfers)
+
+#### 4.1 오늘 기준 이적시장 조회
+
+```
+GET /transfers?leagueId={leagueId}
+```
+
+**Query Parameters**:
+
+- `leagueId` (optional): 리그 ID  
+  - 기본값: 39 (프리미어리그)
+
+**Response**: `CommonResponse<TransferListResponse>`
+
+```typescript
+type TransferWindow = "SUMMER" | "WINTER" | "OFF";
+
+interface TransferListResponse {
+  leagueId: number;
+  season: string;         // 예: "2024"
+  window: TransferWindow; // 현재 날짜 기준 이적시장 상태
+  transfers: Transfer[];
+}
+
+interface Transfer {
+  playerId: number | null;
+  playerName: string | null;
+  fromTeamId: number | null;
+  fromTeamName: string | null;
+  toTeamId: number | null;
+  toTeamName: string | null;
+  transferDate: string | null;  // YYYY-MM-DD
+  transferType: string | null;  // 예: "Transfer", "Loan"
+  fee: string | null;           // 예: "€50m" (제공되는 경우에만)
+}
+```
+
+**인증**: 불필요
+
+**동작 규칙**:
+
+- 서버는 **오늘 날짜 기준**으로 현재가 어느 이적시장 윈도우인지 판별합니다.
+  - 겨울 이적시장 (WINTER): 매년 **1월 1일 ~ 1월 31일**
+  - 여름 이적시장 (SUMMER): 매년 **7월 1일 ~ 8월 31일**
+  - 그 외 기간: `window = "OFF"` (이적시장이 아닌 기간)
+- `window`가 `"SUMMER"` 또는 `"WINTER"`인 경우:
+  - 해당 연도의 해당 기간 안에 포함되는 이적만 `transfers`에 포함됩니다.
+- `window`가 `"OFF"`인 경우:
+  - `transfers`는 빈 배열 `[]`로 내려옵니다.
+- 프론트에서는 `window` 값을 기준으로:
+  - `"SUMMER"` → "여름 이적시장" 뱃지/문구 표시
+  - `"WINTER"` → "겨울 이적시장" 뱃지/문구 표시
+  - `"OFF"` → "현재는 이적시장 기간이 아닙니다" 메시지 표시
+
+리그 필터링:
+
+- `leagueId`를 지정하면 해당 리그의 이적만 조회합니다.
+- 지정하지 않으면 기본 리그(프리미어리그, 39번 리그)의 이적만 조회합니다.
+
+---
+
+### 5. Follow 기능
 
 #### 4.1 경기 Follow 추가
 
