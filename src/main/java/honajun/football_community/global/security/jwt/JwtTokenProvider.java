@@ -39,7 +39,6 @@ public class JwtTokenProvider {
     @Value("${jwt.refresh-token-expiration}")
     private Long REFRESH_TOKEN_TIME;
 
-
     @Value("${jwt.secret.key}")
     private String secretKey;
     private Key key;
@@ -47,13 +46,11 @@ public class JwtTokenProvider {
     // signature -> jwt가 변경되지 않았음을 검증하는 역할
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
-
     // key 객체 생성
     @PostConstruct
     public void init() {
         byte[] bytes = Base64.getDecoder().decode(secretKey);
         key = Keys.hmacShaKeyFor(bytes);
-        int h = 7;
     }
 
     // header 토큰을 가져오기
@@ -76,24 +73,23 @@ public class JwtTokenProvider {
     }
 
     /*
-        TODO 아래 코드를 더 잘 짤수 있는지 나중에 수정을 시도할 것
+     * TODO 아래 코드를 더 잘 짤수 있는지 나중에 수정을 시도할 것
      */
     // 토큰 생성
     public String createAccessToken(Member member, Collection<? extends GrantedAuthority> authorities) {
         Date date = new Date();
 
-        return
-                Jwts.builder()
-                        .setSubject(member.getId().toString())
-                        .claim("authoritiesKey", authorities)
-                        .claim("memberName", member.getName())
-                        .setExpiration(new Date(date.getTime() + ACCESS_TOKEN_TIME))
-                        .setIssuedAt(date)
-                        .signWith(key, signatureAlgorithm)
-                        .compact();
+        return Jwts.builder()
+                .setSubject(member.getId().toString())
+                .claim("authoritiesKey", authorities)
+                .claim("memberName", member.getName())
+                .setExpiration(new Date(date.getTime() + ACCESS_TOKEN_TIME))
+                .setIssuedAt(date)
+                .signWith(key, signatureAlgorithm)
+                .compact();
     }
 
-    public String createRefreshToken(){
+    public String createRefreshToken() {
 
         Date data = new Date();
 
@@ -106,7 +102,6 @@ public class JwtTokenProvider {
                 .signWith(key, signatureAlgorithm)
                 .compact();
     }
-
 
     // 토큰 검증
     public boolean validateToken(String token) {
@@ -123,14 +118,13 @@ public class JwtTokenProvider {
             log.error("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.");
         } catch (IllegalArgumentException e) {
             log.error("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
-        }
-        catch (io.jsonwebtoken.security.SignatureException e){
+        } catch (io.jsonwebtoken.security.SignatureException e) {
             log.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다");
         }
         return false;
     }
 
-    public void validateRefreshToken(String refreshToken){
+    public void validateRefreshToken(String refreshToken) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(refreshToken);
         } catch (SecurityException | MalformedJwtException e) {
@@ -145,8 +139,7 @@ public class JwtTokenProvider {
         } catch (IllegalArgumentException e) {
             log.error("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
             throw new AuthException(AuthExceptionCode.INVALID_TOKEN);
-        }
-        catch (io.jsonwebtoken.security.SignatureException e){
+        } catch (io.jsonwebtoken.security.SignatureException e) {
             log.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다");
             throw new AuthException(AuthExceptionCode.INVALID_TOKEN);
         }
@@ -162,19 +155,20 @@ public class JwtTokenProvider {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
     }
 
-    public Authentication getAuthentication(String token){
-        Claims claims =
-                Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+    public Authentication getAuthentication(String token) {
+        Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
 
-        Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(claims.get("authoritiesKey").toString().split(","))
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
-        org.springframework.security.core.userdetails.User principal = new org.springframework.security.core.userdetails.User(claims.getSubject(), "", authorities);
+        Collection<? extends GrantedAuthority> authorities = Arrays
+                .stream(claims.get("authoritiesKey").toString().split(","))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+        org.springframework.security.core.userdetails.User principal = new org.springframework.security.core.userdetails.User(
+                claims.getSubject(), "", authorities);
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
-    public long getExpirationTime(String token){
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getExpiration().getTime();
+    public long getExpirationTime(String token) {
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getExpiration()
+                .getTime();
     }
 }

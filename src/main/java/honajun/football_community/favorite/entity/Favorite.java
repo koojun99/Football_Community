@@ -25,12 +25,5 @@ public class Favorite {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private FavoriteType favoriteType; // FAVORITE_TEAM, FAVORITE_LEAGUE
-
-    @Column(nullable = false)
-    private boolean isPushed; // 알림 활성화 여부 (삭제 시 비활성화 처리)
-
-    public void toggleNotification() {
-        this.isPushed = !this.isPushed;
-    }
+    private FavoriteType favoriteType; // FAVORITE_TEAM, FAVORITE_LEAGUE, FAVORITE_MATCH
 }

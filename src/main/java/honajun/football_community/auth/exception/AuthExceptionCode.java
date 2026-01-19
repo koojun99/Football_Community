@@ -1,6 +1,5 @@
 package honajun.football_community.auth.exception;
 
-
 import honajun.football_community.global.response.code.BaseCode;
 import honajun.football_community.global.response.code.Reason;
 import lombok.Getter;
@@ -13,9 +12,7 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 @RequiredArgsConstructor
 public enum AuthExceptionCode implements BaseCode {
 
-    //400
-    INVALID_VERIFICATION_CODE(HttpStatus.BAD_REQUEST, "AUTH400_1", "유효하지 않는 인증코드입니다."),
-    //401
+    // 401
     TOKEN_EXPIRED(UNAUTHORIZED, "AUTH401_1", "인증 토큰이 만료 되었습니다. 토큰을 재발급 해주세요"),
     INVALID_TOKEN(UNAUTHORIZED, "AUTH401_2", "인증 토큰이 유효하지 않습니다."),
     INVALID_REFRESH_TOKEN(UNAUTHORIZED, "AUTH401_3", "리프레시 토큰이 유효하지 않습니다."),
@@ -23,9 +20,9 @@ public enum AuthExceptionCode implements BaseCode {
     AUTHENTICATION_REQUIRED(UNAUTHORIZED, "AUTH401_5", "인증 정보가 유효하지 않습니다."),
     LOGIN_REQUIRED(UNAUTHORIZED, "AUTH401_6", "로그인이 필요한 서비스입니다."),
     INVALID_PASSWORD(UNAUTHORIZED, "AUTH401_7", "비밀번호가 일치하지 않습니다."),
-    //403
+    // 403
     FORBIDDEN(UNAUTHORIZED, "AUTH403_1", "접근 권한이 없습니다."),
-    //409
+    // 409
     DUPLICATED_EMAIL(HttpStatus.CONFLICT, "AUTH409_1", "이미 존재하는 이메일입니다."),
     ;
 

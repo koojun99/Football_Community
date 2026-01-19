@@ -30,11 +30,19 @@ public class WikiCategory extends BaseDateTimeEntity {
     @Column(nullable = false)
     private String description;
 
+    @Column(nullable = false)
+    private Integer orderIndex; // 목차 순서 (나무위키의 목차처럼)
+
     @ManyToOne
     @JoinColumn(name = "wiki_id")
     private Wiki wiki;
 
-    public void update(String content) {
-        this.description = content;
+    public void update(String name, String description) {
+        if (name != null) {
+            this.name = name;
+        }
+        if (description != null) {
+            this.description = description;
+        }
     }
 }

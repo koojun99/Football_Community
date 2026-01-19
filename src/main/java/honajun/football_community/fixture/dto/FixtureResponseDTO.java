@@ -20,6 +20,7 @@ public class FixtureResponseDTO {
         private getScores scores;
         private LocalDateTime fixtureDate;
         private FixtureStatus fixtureStatus;
+        private List<FixtureEventResponseDTO> events; // 경기 이벤트 (종료된 경기의 경우 포함)
     }
 
 

@@ -28,7 +28,7 @@ public enum FixtureStatus {
     LIVE("In Progress", "In Play");
 
     private final String description; // 상태에 대한 설명
-    private final String category;    // 상태의 카테고리
+    private final String category; // 상태의 카테고리
 
     FixtureStatus(String description, String category) {
         this.description = description;
@@ -45,5 +45,29 @@ public enum FixtureStatus {
             }
         }
         throw new FixtureException(FixtureExceptionCode.INVALID_STATUS);
+    }
+
+    /**
+     * 경기가 종료되었는지 확인합니다.
+     * Finished 카테고리의 상태(FT, AET, PEN) 또는 취소/중단된 경기(CANC, ABD)를 종료로 간주합니다.
+     */
+    public boolean isFinished() {
+        return "Finished".equals(this.category)
+                || this == CANC
+                || this == ABD
+                || this == AWD
+                || this == WO;
+    }
+
+    /**
+     * 스케줄러에서 이 경기 상태를 스킵해야 하는지 확인합니다.
+     * - NS (Not Started): 경기 시작 전이므로 업데이트 불필요
+     * - HT (Halftime): 하프타임 중이므로 업데이트 불필요
+     * - 종료된 경기: Finished 상태
+     */
+    public boolean shouldSkipScheduling() {
+        return this == NS
+                || this == HT
+                || isFinished();
     }
 }

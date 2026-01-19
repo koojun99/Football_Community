@@ -28,6 +28,15 @@ public class WikiQueryAdapter {
     }
 
     public List<WikiCategory> findWikiCategoriesByWikiId(Long wikiId) {
-        return wikiCategoryRepository.findByWiki_Id(wikiId);
+        return wikiCategoryRepository.findByWiki_IdOrderByOrderIndexAsc(wikiId);
+    }
+    
+    public Integer findMaxOrderIndexByWikiId(Long wikiId) {
+        Integer maxOrderIndex = wikiCategoryRepository.findMaxOrderIndexByWiki_Id(wikiId);
+        return maxOrderIndex != null ? maxOrderIndex : 0;
+    }
+
+    public List<Wiki> findAll() {
+        return wikiRepository.findAll();
     }
 }

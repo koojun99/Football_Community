@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +30,13 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {GeneralException.class})
     protected ResponseEntity<Object> handleCustomException(GeneralException e, HttpServletRequest request) {
-        log.error("handleCustomException throw CustomException : {}", e.getCode());
+        // 인증 관련 예외는 WARN 레벨로 처리 (정상적인 시나리오일 수 있음)
+        String errorCode = e.getErrorReasonHttpStatus().getCode();
+        if (errorCode != null && errorCode.contains("MEMBER404_1")) {
+            log.warn("Authentication required for endpoint: {} {}", request.getMethod(), request.getRequestURI());
+        } else {
+            log.error("handleCustomException throw CustomException : {}", errorCode);
+        }
         return handleExceptionInternal(e, e.getErrorReasonHttpStatus(), HttpHeaders.EMPTY, request);
     }
 
@@ -74,6 +81,23 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
         return handleExceptionInternalArgs(
                 ex, HttpHeaders.EMPTY, ErrorStatus.valueOf("BAD_ARGS_ERROR"), request, errors);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(
+            HttpRequestMethodNotSupportedException ex,
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request) {
+        log.warn("Method not supported: {} for {}", ex.getMethod(), 
+                ((ServletWebRequest) request).getRequest().getRequestURI());
+        return handleExceptionInternalFalse(
+                ex,
+                ErrorStatus._BAD_REQUEST,
+                headers,
+                HttpStatus.METHOD_NOT_ALLOWED,
+                request,
+                String.format("Request method '%s' is not supported", ex.getMethod()));
     }
 
     @ExceptionHandler

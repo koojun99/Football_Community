@@ -1,6 +1,5 @@
 package honajun.football_community.favorite.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import honajun.football_community.global.enums.favorite.FavoriteType;
 import java.util.List;
 import lombok.*;
@@ -15,9 +14,7 @@ public class FavoriteResponseDTO {
     public static class getFavorite {
         private Long id;
         private FavoriteType favoriteType;
-
-        @JsonProperty("isPushed")
-        private Boolean isPushed;
+        private Long targetId;
     }
 
     @Builder

@@ -1,6 +1,7 @@
 package honajun.football_community.wiki.entity;
 
 import honajun.football_community.global.common.BaseDateTimeEntity;
+import honajun.football_community.wiki.comment.entity.Comment;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,6 +30,15 @@ public class Wiki extends BaseDateTimeEntity {
     @Column(nullable = false)
     private String title;
 
+    @Column(nullable = true)
+    private Long teamId; // 팀 위키인 경우 팀 ID
+
+    @Column(nullable = true)
+    private Long leagueId; // 리그 위키인 경우 리그 ID
+
     @OneToMany(mappedBy = "wiki", cascade = CascadeType.ALL)
     private List<WikiCategory> categories;
+
+    @OneToMany(mappedBy = "wiki", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
 }

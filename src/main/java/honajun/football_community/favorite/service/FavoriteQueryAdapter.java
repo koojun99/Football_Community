@@ -26,7 +26,18 @@ public class FavoriteQueryAdapter {
         return favoriteRepository.findAllByMember(member);
     }
 
-    public Optional<Favorite> existsByMemberAndTargetIdAndFavoriteType(Member member, Long targetId, FavoriteType favoriteType) {
+    public Optional<Favorite> existsByMemberAndTargetIdAndFavoriteType(Member member, Long targetId,
+            FavoriteType favoriteType) {
         return favoriteRepository.findByMemberAndTargetIdAndFavoriteTypeWithLock(member, targetId, favoriteType);
+    }
+
+    // 특정 타입의 즐겨찾기 목록 조회
+    public List<Favorite> findAllByMemberAndFavoriteType(Member member, FavoriteType favoriteType) {
+        return favoriteRepository.findAllByMemberAndFavoriteType(member, favoriteType);
+    }
+
+    // 특정 타입의 모든 즐겨찾기 목록 조회 (스케줄러용)
+    public List<Favorite> findAllByFavoriteType(FavoriteType favoriteType) {
+        return favoriteRepository.findAllByFavoriteType(favoriteType);
     }
 }

@@ -27,6 +27,14 @@ public class FixtureApiResponse {
         private Long timestamp;
         @JsonProperty("status")
         private Status status;
+        private Extra extra; // 추가 시간 정보 (2024년 10월 릴리스에서 추가됨)
+    }
+
+    @Getter
+    @Setter
+    public static class Extra {
+        private Integer home; // 홈팀 추가 시간
+        private Integer away; // 원정팀 추가 시간
     }
 
     @Getter

@@ -17,5 +17,12 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT f FROM Favorite f WHERE f.member = :member AND f.targetId = :targetId AND f.favoriteType = :favoriteType")
-    Optional<Favorite> findByMemberAndTargetIdAndFavoriteTypeWithLock(Member member, Long targetId, FavoriteType favoriteType);
+    Optional<Favorite> findByMemberAndTargetIdAndFavoriteTypeWithLock(Member member, Long targetId,
+            FavoriteType favoriteType);
+
+    // 특정 타입의 즐겨찾기 목록 조회
+    List<Favorite> findAllByMemberAndFavoriteType(Member member, FavoriteType favoriteType);
+
+    // 특정 타입의 모든 즐겨찾기 목록 조회 (스케줄러용)
+    List<Favorite> findAllByFavoriteType(FavoriteType favoriteType);
 }

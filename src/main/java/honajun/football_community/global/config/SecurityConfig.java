@@ -2,10 +2,6 @@ package honajun.football_community.global.config;
 
 import honajun.football_community.global.security.jwt.JwtFilter;
 import honajun.football_community.global.security.jwt.JwtTokenProvider;
-import honajun.football_community.global.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
-import honajun.football_community.global.security.oauth2.service.CustomOAuth2UserService;
-import honajun.football_community.global.security.oauth2.handler.OAuth2AuthenticationFailureHandler;
-import honajun.football_community.global.security.oauth2.handler.OAuth2AuthenticationSuccessHandler;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -31,106 +27,105 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final CustomOAuth2UserService customOAuth2UserService;
-    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
-    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
-    private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
-    private final JwtTokenProvider jwtTokenProvider;
+        private final JwtTokenProvider jwtTokenProvider;
 
-    // 비밀번호 암호화를 위한 PasswordEncoder 빈을 생성
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+        // 비밀번호 암호화를 위한 PasswordEncoder 빈을 생성
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+                return new BCryptPasswordEncoder();
+        }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) ->
-                web.ignoring()
-                        .requestMatchers(
-                                "/health/**",
-                                "/actuator/**",
-                                "/schedule",
-                                "/v3/api-docs",
-                                "/v3/api-docs/**",
-                                "/error",
-                                "/favicon.io",
-                                "/swagger-ui/**",
-                                "/docs/**");
-    }
+        @Bean
+        public WebSecurityCustomizer webSecurityCustomizer() {
+                return (web) -> web.ignoring()
+                                .requestMatchers(
+                                                "/health/**",
+                                                "/actuator/**",
+                                                "/schedule",
+                                                "/v3/api-docs",
+                                                "/v3/api-docs/**",
+                                                "/error",
+                                                "/favicon.io",
+                                                "/swagger-ui/**",
+                                                "/docs/**");
+        }
 
-    // SecurityFilterChain 빈을 생성하여 HTTP 보안 설정을 정의
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(AbstractHttpConfigurer::disable) // CSRF 보호를 비활성화
-                .cors(corsConfigurer -> corsConfigurer.configurationSource(
-                        corsConfiguration())) // Spring Security의 기본 CORS 처리 비활성화
-                .addFilterBefore(new JwtFilter(jwtTokenProvider),
-                        UsernamePasswordAuthenticationFilter.class) // JwtFilter를 UsernamePasswordAuthenticationFilter 앞에 추가
-                .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-                        .permitAll() // 정적 리소스에 대한 접근 허용
-                        .requestMatchers("/auth/**").permitAll() // /auth/** 경로에 대한 접근 허용
-                        .requestMatchers("/actuator/**").permitAll() // /actuator/** 경로에 대한 접근 허용
-                        .requestMatchers("/login/oauth2/**").permitAll() // /login/oauth2/** 경로에 대한 접근 허용
-                        .requestMatchers("/members/**").permitAll() // /member/** 경로에 대한 접근 허용
-                        .requestMatchers(HttpMethod.GET, "/feed/posts/{postId}")
-                        .permitAll() // /feed/posts/** 경로에 대한 접근 허용
-                        .requestMatchers(HttpMethod.GET, "/wikis/**").permitAll() // /wiki/** 경로에 대한 접근 허용
-                        .requestMatchers(HttpMethod.GET, "/fixtures/**").permitAll() // /fixtures/** 경로에 대한 접근 허용
-                        .anyRequest().authenticated() // 그 외 모든 요청에 대해 인증을 요구합니다.
-                )
-                .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(
-                        SessionCreationPolicy.STATELESS)) // 세션 관리를 Stateless로 설정
-                .headers(headers -> { // Content-Security-Policy 설정
-                    headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin); // 동일 출처 iframe 허용
-                    headers.contentSecurityPolicy(csp -> csp
-                            .policyDirectives(
-                                    "default-src 'none'; " +
-                                            "script-src 'self' https://accounts.google.com https://kauth.kakao.com; " +
-                                            "connect-src 'self' https://api.example.com https://kauth.kakao.com; " +
-                                            "child-src 'self'; " +
-                                            "img-src 'self' data: https://cdn.example.com; " +
-                                            "font-src 'self' data: https://fonts.googleapis.com; " +
-                                            "style-src 'self' 'unsafe-inline';" +
-                                            "frame-ancestors 'self'; " +
-                                            "form-action 'self';"
-                            )
-                    );
-                })
-                // 예외 처리 핸들러 추가
-                .exceptionHandling(exceptionHandling -> exceptionHandling
-                        .authenticationEntryPoint((request, response, authException) -> {
-                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                            response.getWriter().write("Unauthorized access - please login first");
-                        })
-                        .accessDeniedHandler((request, response, accessDeniedException) -> {
-                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                            response.getWriter().write("Access Denied - insufficient permissions");
-                        })
-                )
-                .oauth2Login(configure ->
-                        configure.authorizationEndpoint(config -> config.authorizationRequestRepository(
-                                        httpCookieOAuth2AuthorizationRequestRepository))
-                                .userInfoEndpoint(config -> config.userService(customOAuth2UserService))
-                                .successHandler(oAuth2AuthenticationSuccessHandler)
-                                .failureHandler(oAuth2AuthenticationFailureHandler)
-                );
-        return http.build();
+        // SecurityFilterChain 빈을 생성하여 HTTP 보안 설정을 정의
+        @Bean
+        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+                http
+                                .csrf(AbstractHttpConfigurer::disable) // CSRF 보호를 비활성화
+                                .cors(corsConfigurer -> corsConfigurer.configurationSource(
+                                                corsConfiguration())) // Spring Security의 기본 CORS 처리 비활성화
+                                .addFilterBefore(new JwtFilter(jwtTokenProvider),
+                                                UsernamePasswordAuthenticationFilter.class) // JwtFilter를
+                                                                                            // UsernamePasswordAuthenticationFilter
+                                                                                            // 앞에 추가
+                                .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
+                                                .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+                                                .permitAll() // 정적 리소스에 대한 접근 허용
+                                                .requestMatchers("/health/**").permitAll() // /health/** 경로에 대한 접근 허용
+                                                .requestMatchers("/auth/**").permitAll() // /auth/** 경로에 대한 접근 허용
+                                                .requestMatchers("/actuator/health").permitAll() // /actuator/health만 공개
+                                                .requestMatchers("/actuator/**").authenticated() // 나머지 actuator 엔드포인트는
+                                                                                                 // 인증 필요
+                                                .requestMatchers("/members/**").permitAll() // /member/** 경로에 대한 접근 허용
+                                                .requestMatchers(HttpMethod.GET, "/wikis/**").permitAll() // /wiki/**
+                                                                                                          // 경로에 대한 접근
+                                                                                                          // 허용
+                                                .requestMatchers(HttpMethod.GET, "/fixtures/**").permitAll() // /fixtures/**
+                                                                                                             // 경로에 대한
+                                                                                                             // 접근 허용
+                                                .requestMatchers("/fixtures/events/**").permitAll() // 실시간 이벤트 SSE 경로 허용
+                                                .anyRequest().authenticated() // 그 외 모든 요청에 대해 인증을 요구합니다.
+                                )
+                                .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(
+                                                SessionCreationPolicy.STATELESS)) // 세션 관리를 Stateless로 설정
+                                .headers(headers -> { // Content-Security-Policy 설정
+                                        headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin); // 동일 출처
+                                                                                                                // iframe
+                                                                                                                // 허용
+                                        headers.contentSecurityPolicy(csp -> csp
+                                                        .policyDirectives(
+                                                                        "default-src 'none'; " +
+                                                                                        "script-src 'self'; " +
+                                                                                        "connect-src 'self' https://api.example.com; "
+                                                                                        +
+                                                                                        "child-src 'self'; " +
+                                                                                        "img-src 'self' data: https://cdn.example.com; "
+                                                                                        +
+                                                                                        "font-src 'self' data: https://fonts.googleapis.com; "
+                                                                                        +
+                                                                                        "style-src 'self' 'unsafe-inline';"
+                                                                                        +
+                                                                                        "frame-ancestors 'self'; " +
+                                                                                        "form-action 'self';"));
+                                })
+                                // 예외 처리 핸들러 추가
+                                .exceptionHandling(exceptionHandling -> exceptionHandling
+                                                .authenticationEntryPoint((request, response, authException) -> {
+                                                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                                                        response.getWriter().write(
+                                                                        "Unauthorized access - please login first");
+                                                })
+                                                .accessDeniedHandler((request, response, accessDeniedException) -> {
+                                                        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                                                        response.getWriter().write(
+                                                                        "Access Denied - insufficient permissions");
+                                                }));
+                return http.build();
 
-    }
+        }
 
-    public CorsConfigurationSource corsConfiguration() {
-        return request -> {
-            org.springframework.web.cors.CorsConfiguration config =
-                    new org.springframework.web.cors.CorsConfiguration();
-            config.setAllowedHeaders(Collections.singletonList("*")); // 모든 헤더 허용
-            config.setAllowedMethods(Collections.singletonList("*")); // 모든 메소드 허용
-            config.setAllowedOriginPatterns(Collections.singletonList("*")); // 모든 Origin 허용
-            config.setAllowCredentials(true);   // 인증정보 허용
-            return config;
-        };
-    }
+        public CorsConfigurationSource corsConfiguration() {
+                return request -> {
+                        org.springframework.web.cors.CorsConfiguration config = new org.springframework.web.cors.CorsConfiguration();
+                        config.setAllowedHeaders(Collections.singletonList("*")); // 모든 헤더 허용
+                        config.setAllowedMethods(Collections.singletonList("*")); // 모든 메소드 허용
+                        config.setAllowedOriginPatterns(Collections.singletonList("*")); // 모든 Origin 허용
+                        config.setAllowCredentials(true); // 인증정보 허용
+                        return config;
+                };
+        }
 
 }

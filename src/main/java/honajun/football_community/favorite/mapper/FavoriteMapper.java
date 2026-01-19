@@ -14,7 +14,6 @@ public class FavoriteMapper {
                 .targetId(request.getTargetId())
                 .favoriteType(request.getFavoriteType())
                 .member(member)
-                .isPushed(false)
                 .build();
     }
 
@@ -22,7 +21,7 @@ public class FavoriteMapper {
         return FavoriteResponseDTO.getFavorite.builder()
                 .id(favorite.getId())
                 .favoriteType(favorite.getFavoriteType())
-                .isPushed(favorite.isPushed())
+                .targetId(favorite.getTargetId())
                 .build();
     }
 
